@@ -24,8 +24,8 @@ local CharAdded = function(char)
     })
 end
 workspace.Game.Players.ChildAdded:Connect(CharAdded)
-for i,v in pairs(workspace.Game.Players:GetChildren()) do
-    coroutine.wrap(CharAdded)(v)
+for _, v in pairs(workspace.Game.Players:GetChildren()) do
+    CharAdded(v)
 end
 
 ESP:AddObjectListener(workspace.Game.Players, {
