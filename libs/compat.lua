@@ -66,7 +66,11 @@ local transfer = {
 	getscriptclosure = getscriptclosure or get_script_function,
 	getgc = getgc or get_gc_objects,
 	wait = task.wait,
-	spawn = task.spawn
+	spawn = task.spawn,
+	getupvalues = (debug and debug.getupvalues) or getupvalues or getupvals,
+	getconstants = (debug and debug.getconstants) or getconstants or getconsts,
+	setupvalue = (debug and debug.setupvalue) or setupvalue or setupval,
+	setconstant = (debug and debug.setconstant) or setconstant or setconst
 }
 transfer.sandbox = function(url, custom)
 	if custom and type(custom) == "string" then
