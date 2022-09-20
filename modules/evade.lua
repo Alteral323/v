@@ -11,6 +11,7 @@ for _, v in pairs(workspace.Game.Players:GetChildren()) do
     if v:FindFirstChild("Head") then
         ESP:Add(v, {
             Name = v.Name,
+            Player = Players:FindFirstChild(v.Name),
             PrimaryPart = "HumanoidRootPart",
             IsEnabled = "plrEsp",
             Color = ESP.Presets.Green
