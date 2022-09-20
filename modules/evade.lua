@@ -8,18 +8,26 @@ local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 ESP.Color = ESP.Presets.Green
 
-ESP:AddObjectListener(workspace.Game.Players, {
-    Type = "Model",
-    PrimaryPart = "HumanoidRootPart",
-    CustomName = function(obj)
-        return tostring(obj.Name)
-    end,
-    Color = ESP.Presets.Red,
-    Validator = function(obj)
-        return obj:FindFirstChild("HRP")
-    end,
-    IsEnabled = "nextbotEsp"
-})
+local ListenForNextbots = function()
+    ESP:AddObjectListener(workspace.Game.Players, {
+        Type = "Model",
+        PrimaryPart = "HumanoidRootPart",
+        CustomName = function(obj)
+            return tostring(obj.Name)
+        end,
+        Color = ESP.Presets.Red,
+        Validator = function(obj)
+            return obj:FindFirstChild("HRP")
+        end,
+        IsEnabled = "nextbotEsp"
+    })
+end
+workspace.Game.ChildAdded:Connect(function(obj)
+    if obj.Name == "Players" then
+        ListenForNextbots()
+    end
+end)
+ListenForNextbots()
 
 local NextbotESP = Render.CreateOptionsButton({
     Name = "ESP",
