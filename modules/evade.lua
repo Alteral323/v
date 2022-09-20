@@ -13,6 +13,19 @@ ESP:AddObjectListener(workspace.Game.Players, {
     CustomName = function(obj)
         return tostring(obj.Name)
     end,
+    Color = Color3.fromRGB(0, 255, 154),
+    Validator = function(obj)
+        return obj:FindFirstChild("Head")
+    end,
+    IsEnabled = "plrEsp"
+})
+
+ESP:AddObjectListener(workspace.Game.Players, {
+    Type = "Model",
+    PrimaryPart = "HumanoidRootPart",
+    CustomName = function(obj)
+        return tostring(obj.Name)
+    end,
     Color = Color3.fromRGB(255, 0, 128),
     Validator = function(obj)
         return obj:FindFirstChild("HRP")
@@ -29,7 +42,7 @@ local NextbotESP = Render.CreateOptionsButton({
 NextbotESP.CreateToggle({
     Name = "Players",
     Function = function(callback)
-        ESP.Players = callback
+        ESP.plrEsp = callback
     end,
     Default = true
 })
