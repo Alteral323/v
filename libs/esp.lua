@@ -14,7 +14,7 @@ local ESP = {
     Presets = {
         Green = Color3.fromRGB(0, 255, 154),
         Red = Color3.fromRGB(255, 0, 128)
-    }
+    },
     
     Objects = setmetatable({}, {__mode="kv"}),
     Overrides = {}
