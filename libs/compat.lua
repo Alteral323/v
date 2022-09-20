@@ -104,7 +104,7 @@ local globals = {
 		return networkownertick <= tick()
 	end
 }
-transfer.globals = function(url, custom)
+globals.sandbox = function(url, custom)
 	if custom and type(custom) == "string" then
 		globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
 		globals.ImportESP = function()
