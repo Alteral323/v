@@ -71,7 +71,14 @@ local transfer = {
 	getconstants = (debug and debug.getconstants) or getconstants or getconsts,
 	setupvalue = (debug and debug.setupvalue) or setupvalue or setupval,
 	setconstant = (debug and debug.setconstant) or setconstant or setconst,
-	hookfunction = hookfunction or detour_function
+	hookfunction = hookfunction or function(func, newfunc, applycclosure)
+		if replaceclosure then
+			replaceclosure(func, newfunc)
+			return func
+		end
+		func = applycclosure and (newcclosure or function(f) return f end) or newfunc
+		return func
+	end
 }
 transfer.sandbox = function(url, custom)
 	if custom and type(custom) == "string" then
