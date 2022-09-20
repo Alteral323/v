@@ -2,10 +2,9 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local uilib = loadstring(game:HttpGet("https://raw.githubusercontent.com/3dbfeuh/v/main/ui.lua"))()("Evade")
-local Render = uilib.ObjectsThatCanBeSaved.RenderWindow.Api
-local Utility = uilib.ObjectsThatCanBeSaved.UtilityWindow.Api
-local World = uilib.ObjectsThatCanBeSaved.WorldWindow.Api
+local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
+local Utility = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api
+local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 
 ESP:AddObjectListener(workspace.Game.Players, {
