@@ -8,26 +8,18 @@ local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 ESP.Color = ESP.Presets.Green
 
-local ListenForNextbots = function()
-    ESP:AddObjectListener(workspace.Game.Players, {
-        Type = "Model",
-        PrimaryPart = "HumanoidRootPart",
-        CustomName = function(obj)
-            return tostring(obj.Name)
-        end,
-        Color = ESP.Presets.Red,
-        Validator = function(obj)
-            return obj:FindFirstChild("HRP")
-        end,
-        IsEnabled = "nextbotEsp"
-    })
-end
-workspace.Game.ChildAdded:Connect(function(obj)
-    if obj.Name == "Players" then
-        ListenForNextbots()
-    end
-end)
-ListenForNextbots()
+ESP:AddObjectListener(workspace.Game.Players, {
+    Type = "Model",
+    PrimaryPart = "HumanoidRootPart",
+    CustomName = function(obj)
+        return tostring(obj.Name)
+    end,
+    Color = ESP.Presets.Red,
+    Validator = function(obj)
+        return obj:GetAttribute("AI") and obj:GetAttribute("AI") == true
+    end,
+    IsEnabled = "nextbotEsp"
+})
 
 local NextbotESP = Render.CreateOptionsButton({
     Name = "ESP",
@@ -77,6 +69,23 @@ Respawn = Utility.CreateOptionsButton({
         if callback then
             ReplicatedStorage.Events.Respawn:FireServer()
             Respawn.ToggleButton(false)
+        end
+    end
+})
+
+local AutoRespawn = {Enabled = false}
+AutoRespawn = Utility.CreateOptionsButton({
+    Name = "AutoRespawn",
+    Function = function(callback)
+        if callback then
+            repeat wait(0.5)
+                if LocalPlayer and LocalPlayer:FindFirstChildWhichIsA("PlayerGui") then
+                    local PlayerGui = LocalPlayer:FindFirstChildWhichIsA("PlayerGui")
+                    if PlayerGui.Respawn.RequireRevival.Visible then
+                        ReplicatedStorage.Events.Respawn:FireServer()
+                    end
+                end
+            until not AutoRespawn.Enabled
         end
     end
 })
