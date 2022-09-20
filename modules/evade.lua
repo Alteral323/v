@@ -13,7 +13,7 @@ ESP:AddObjectListener(workspace.Game.Players, {
     CustomName = function(obj)
         return tostring(obj.Name)
     end,
-    Color = Color3.fromRGB(0, 255, 154),
+    Color = ESP.Presets.Green,
     Validator = function(obj)
         return obj:FindFirstChild("Head")
     end,
@@ -26,7 +26,7 @@ ESP:AddObjectListener(workspace.Game.Players, {
     CustomName = function(obj)
         return tostring(obj.Name)
     end,
-    Color = Color3.fromRGB(255, 0, 128),
+    Color = ESP.Presets.Red,
     Validator = function(obj)
         return obj:FindFirstChild("HRP")
     end,
