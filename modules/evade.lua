@@ -86,9 +86,7 @@ AutoRespawn = Utility.CreateOptionsButton({
                         local PlayerGui = LocalPlayer:FindFirstChildWhichIsA("PlayerGui")
                         if PlayerGui:FindFirstChild("Respawn") and PlayerGui.Respawn:FindFirstChild("RequireRevival") then
                             if PlayerGui.Respawn.RequireRevival.Visible then
-                                debounce = true
-                                ReplicatedStorage.Events.Reset:FireServer()
-                                wait(2)
+                                wait(2.7)
                                 ReplicatedStorage.Events.Respawn:FireServer()
                                 wait(2)
                                 debounce = false
@@ -116,6 +114,5 @@ SlipperyFloor = World.CreateOptionsButton({
                 setconstant(require(LocalPlayer.Character.Movement).ApplyFriction, 9, 5)
             end
         end
-    end,
-    HoverText = "Makes the floor slippery"
+    end
 })
