@@ -7,6 +7,17 @@ local Utility = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 
+for _, v in pairs(workspace.Game.Players:GetChildren()) do
+    if v:FindFirstChild("Head") then
+        ESP:Add(v, {
+            Name = v.Name,
+            PrimaryPart = "HumanoidRootPart",
+            IsEnabled = "plrEsp",
+            Color = ESP.Presets.Green
+        })
+    end
+end
+
 ESP:AddObjectListener(workspace.Game.Players, {
     Type = "Model",
     PrimaryPart = "HumanoidRootPart",
