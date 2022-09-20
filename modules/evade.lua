@@ -6,27 +6,7 @@ local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
 local Utility = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
-
-local CharAdded = function(char)
-    if char:FindFirstChild("HRP") then
-        return
-    end
-    local p = Players:FindFirstChild(char.Name)
-    if not p or p == Players.LocalPlayer then
-        return
-    end
-    ESP:Add(char, {
-        Name = p.Name,
-        Player = p,
-        PrimaryPart = char.HumanoidRootPart,
-        IsEnabled = "plrEsp",
-        Color = ESP.Presets.Green
-    })
-end
-workspace.Game.Players.ChildAdded:Connect(CharAdded)
-for _, v in pairs(workspace.Game.Players:GetChildren()) do
-    CharAdded(v)
-end
+ESP.Color = ESP.Presets.Green
 
 ESP:AddObjectListener(workspace.Game.Players, {
     Type = "Model",
@@ -50,7 +30,7 @@ local NextbotESP = Render.CreateOptionsButton({
 NextbotESP.CreateToggle({
     Name = "Players",
     Function = function(callback)
-        ESP.plrEsp = callback
+        ESP.Players = callback
     end,
     Default = true
 })
