@@ -1,6 +1,6 @@
-local Players = game:GetService("Players")
+local Players = Services.Players
 local LocalPlayer = Players.LocalPlayer
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = Services.ReplicatedStorage
 
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
 local Utility = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api
