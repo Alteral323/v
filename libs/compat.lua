@@ -23,6 +23,10 @@ local LoadURL = function(url)
 	return loadstring(game:HttpGet(url))()
 end
 local gsub = string.gsub
+local newcc = newcclosure or function(f)
+	return f
+end
+local firetitouched = {}
 local transfer = {
 	Services = Services,
 	LoadURL = LoadURL,
@@ -52,9 +56,7 @@ local transfer = {
 	checkcaller = checkcaller or function()
 		return false
 	end,
-	newcclosure = newcclosure or function(f)
-		return f
-	end,
+	newcclosure = newcc,
 	setreadonly = setreadonly or (make_writeable and function(tbl, readonly)
 		if readonly then
 			make_readonly(tbl)
@@ -76,8 +78,19 @@ local transfer = {
 			replaceclosure(func, newfunc)
 			return func
 		end
-		func = applycclosure and (newcclosure or function(f) return f end) or newfunc
+		func = applycclosure and newcc or newfunc
 		return func
+	end,
+	firetouchinterest = firetouchinterest or function(part1, part2, toggle)
+		if part1 and part2 then
+			if toggle == 0 then
+				firetitouched[1] = part1.CFrame
+				part1.CFrame = part2.CFrame
+			else
+				part1.CFrame = firetitouched[1]
+				firetitouched[1] = nil
+			end
+		end
 	end
 }
 transfer.sandbox = function(url, custom)
