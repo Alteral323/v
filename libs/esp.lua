@@ -13,9 +13,10 @@ local ESP = {
     Players = true,
     Presets = {
         Green = Color3.fromRGB(0, 255, 154),
-        Red = Color3.fromRGB(255, 0, 128)
+        Red = Color3.fromRGB(255, 0, 128),
+        Orange = Color3.fromRGB(255, 162, 0),
+        Blue = Color3.fromRGB(0, 145, 255)
     },
-    
     Objects = setmetatable({}, {__mode="kv"}),
     Overrides = {}
 }
