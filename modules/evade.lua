@@ -15,7 +15,7 @@ ESP:AddObjectListener(workspace.Game.Players, {
     end,
     Color = Color3.fromRGB(255, 0, 128),
     Validator = function(obj)
-        return obj:FindFirstChild("StatChanges") or obj:FindFirstChild("HRP")
+        return obj:FindFirstChild("HRP")
     end,
     IsEnabled = "nextbotEsp"
 })
