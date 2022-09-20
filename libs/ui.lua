@@ -5,11 +5,11 @@ return function(save)
     if not isfolder("vape/Profiles") then
         makefolder("vape/Profiles")
     end
-    if not isfolder("vape/Profiles/3dbfeuh") then
-        makefolder("vape/Profiles/3dbfeuh")
+    if not isfolder("vape/Profiles/new") then
+        makefolder("vape/Profiles/new")
     end
     shared.VapeIndependent = true
-    shared.CustomSaveVape = "3dbfeuh/" .. save
+    shared.CustomSaveVape = "new/" .. save
     local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua"))()
     task.spawn(function()
         for _, v in pairs(GuiLibrary.ObjectsThatCanBeSaved.GUIWindow.Object:GetChildren()) do
