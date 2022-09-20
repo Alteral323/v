@@ -23,16 +23,20 @@ local LoadURL = function(url)
 	return loadstring(game:HttpGet(url))()
 end
 local gsub = string.gsub
+local sethid = sethiddenproperty or set_hidden_property or set_hidden_prop
+local gethid = gethiddenproperty or get_hidden_property or get_hidden_prop
+local setsim = setsimulationradius or set_simulation_radius
 local newcc = newcclosure or function(f)
 	return f
 end
 local firetouched = {}
+local networkownertick = tick()
 local transfer = {
 	Services = Services,
 	LoadURL = LoadURL,
-	sethiddenproperty = sethiddenproperty or set_hidden_property or set_hidden_prop,
-	gethiddenproperty = gethiddenproperty or get_hidden_property or get_hidden_prop,
-	setsimulationradius = setsimulationradius or set_simulation_radius,
+	sethiddenproperty = sethid,
+	gethiddenproperty = gethid,
+	setsimulationradius = setsim,
 	request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request,
 	queue_on_teleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport),
 	gethui = get_hidden_gui or gethui,
@@ -91,6 +95,13 @@ local transfer = {
 				firetouched[1] = nil
 			end
 		end
+	end,
+	isnetworkowner = isnetworkowner or function(part)
+		if gethid(part, "NetworkOwnershipRule") == Enum.NetworkOwnership.Manual then 
+			sethid(part, "NetworkOwnershipRule", Enum.NetworkOwnership.Automatic)
+			networkownertick = tick() + 8
+		end
+		return networkownertick <= tick()
 	end
 }
 transfer.sandbox = function(url, custom)
