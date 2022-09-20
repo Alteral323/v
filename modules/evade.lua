@@ -30,13 +30,15 @@ NextbotESP.CreateToggle({
     Name = "Players",
     Function = function(callback)
         ESP.Players = callback
-    end
+    end,
+    Default = true
 })
 NextbotESP.CreateToggle({
     Name = "Nextbots",
     Function = function(callback)
         ESP.nextbotEsp = callback
-    end
+    end,
+    Default = true
 })
 NextbotESP.CreateToggle({
     Name = "Boxes",
@@ -76,15 +78,13 @@ SlipperyFloor = World.CreateOptionsButton({
     Function = function(callback)
         if callback then
             if LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Movement") then
-                local applyFriction = require(LocalPlayer.Character.Movement).ApplyFriction
-                setconstant(applyFriction, 9, 0.1)
+                setconstant(require(LocalPlayer.Character.Movement).ApplyFriction, 9, 0.1)
             else
                 SlipperyFloor.ToggleButton(false)
             end
         else
             if LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Movement") then
-                local applyFriction = require(LocalPlayer.Character.Movement).ApplyFriction
-                setconstant(applyFriction, 9, 5)
+                setconstant(require(LocalPlayer.Character.Movement).ApplyFriction, 9, 5)
             end
         end
     end,
