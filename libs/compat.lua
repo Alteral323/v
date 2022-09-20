@@ -31,7 +31,7 @@ local newcc = newcclosure or function(f)
 end
 local firetouched = {}
 local networkownertick = tick()
-local transfer = {
+local globals = {
 	Services = Services,
 	LoadURL = LoadURL,
 	sethiddenproperty = sethid,
@@ -104,10 +104,10 @@ local transfer = {
 		return networkownertick <= tick()
 	end
 }
-transfer.sandbox = function(url, custom)
+transfer.globals = function(url, custom)
 	if custom and type(custom) == "string" then
-		transfer.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
-		transfer.ImportESP = function()
+		globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
+		globals.ImportESP = function()
 			local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua"))()
 			ESP:Toggle(false)
 			ESP.Players = false
@@ -118,7 +118,7 @@ transfer.sandbox = function(url, custom)
 		end
 	end
 	local module = assert(loadstring(game:HttpGet(url)))
-	setfenv(module, setmetatable(transfer, {__index = getfenv(1)}))
+	setfenv(module, setmetatable(globals, {__index = getfenv(1)}))
 	return module() or {}
 end
-return transfer.sandbox
+return globals.sandbox
