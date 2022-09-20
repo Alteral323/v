@@ -93,5 +93,3 @@ SlipperyFloor = World.CreateOptionsButton({
     end,
     HoverText = "Makes the floor slippery"
 })
-
-shared.VapeManualLoad = true
