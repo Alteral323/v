@@ -33,7 +33,7 @@ NewESP.CreateToggle({
     Default = true
 })
 NewESP.CreateToggle({
-    Name = "Nextbots",
+    Name = "Monsters",
     Function = function(callback)
         ESP.Monsters = callback
     end,
@@ -67,9 +67,9 @@ local isNear = function(monster, dist)
     return false
 end
 
-local Killaura = {Enabled = false}
-Killaura = Combat.CreateOptionsButton({
-    Name = "KillAura",
+local KnifeAura = {Enabled = false}
+KnifeAura = Combat.CreateOptionsButton({
+    Name = "KnifeAura",
     Function = function(callback)
         if callback then
             spawn(function()
@@ -79,7 +79,7 @@ Killaura = Combat.CreateOptionsButton({
                             ReplicatedStorage.Framework.Remotes.KnifeHitbox:FireServer(v:FindFirstChildOfClass("Humanoid"))
                         end
                     end
-                until not Killaura.Enabled
+                until not KnifeAura.Enabled
             end)
         end
     end
