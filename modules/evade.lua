@@ -8,8 +8,9 @@ local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 ESP.Color = ESP.Presets.Green
 
-ESP:AddObjectListener(workspace.Game.Players, {
+ESP:AddObjectListener(workspace, {
     Type = "Model",
+    Recursive = true,
     PrimaryPart = "HumanoidRootPart",
     CustomName = function(obj)
         return tostring(obj.Name)
@@ -80,7 +81,7 @@ AutoRespawn = Utility.CreateOptionsButton({
         if callback then
             local debounce = false
             spawn(function()
-                repeat wait(0.5)
+                repeat wait(1)
                     if not debounce and LocalPlayer and LocalPlayer:FindFirstChildWhichIsA("PlayerGui") then
                         local PlayerGui = LocalPlayer:FindFirstChildWhichIsA("PlayerGui")
                         if PlayerGui:FindFirstChild("Respawn") and PlayerGui.Respawn:FindFirstChild("RequireRevival") then
