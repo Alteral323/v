@@ -26,7 +26,7 @@ local gsub = string.gsub
 local newcc = newcclosure or function(f)
 	return f
 end
-local firetitouched = {}
+local firetouched = {}
 local transfer = {
 	Services = Services,
 	LoadURL = LoadURL,
@@ -84,11 +84,11 @@ local transfer = {
 	firetouchinterest = firetouchinterest or function(part1, part2, toggle)
 		if part1 and part2 then
 			if toggle == 0 then
-				firetitouched[1] = part1.CFrame
+				firetouched[1] = part1.CFrame
 				part1.CFrame = part2.CFrame
 			else
-				part1.CFrame = firetitouched[1]
-				firetitouched[1] = nil
+				part1.CFrame = firetouched[1]
+				firetouched[1] = nil
 			end
 		end
 	end
