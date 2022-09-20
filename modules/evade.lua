@@ -18,7 +18,7 @@ local CharAdded = function(char)
     ESP:Add(char, {
         Name = p.Name,
         Player = p,
-        PrimaryPart = "HumanoidRootPart",
+        PrimaryPart = char.HumanoidRootPart,
         IsEnabled = "plrEsp",
         Color = ESP.Presets.Green
     })
