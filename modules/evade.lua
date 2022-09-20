@@ -78,15 +78,25 @@ AutoRespawn = Utility.CreateOptionsButton({
     Name = "AutoRespawn",
     Function = function(callback)
         if callback then
-            repeat wait(0.5)
-                if LocalPlayer and LocalPlayer:FindFirstChildWhichIsA("PlayerGui") then
-                    local PlayerGui = LocalPlayer:FindFirstChildWhichIsA("PlayerGui")
-                    if PlayerGui.Respawn.RequireRevival.Visible then
-                        ReplicatedStorage.Events.Respawn:FireServer()
+            local debounce = false
+            spawn(function()
+                repeat
+                    if not debounce and LocalPlayer and LocalPlayer:FindFirstChildWhichIsA("PlayerGui") then
+                        local PlayerGui = LocalPlayer:FindFirstChildWhichIsA("PlayerGui")
+                        if PlayerGui:FindFirstChild("Respawn") and PlayerGui.Respawn:FindFirstChild("RequireRevival") then
+                            if PlayerGui.Respawn.RequireRevival.Visible then
+                                debounce = true
+                                ReplicatedStorage.Events.Reset:FireServer()
+                                wait(2)
+                                ReplicatedStorage.Events.Respawn:FireServer()
+                                wait(2)
+                                debounce = false
+                            end
+                        end
                     end
-                end
-            until not AutoRespawn.Enabled
-        end
+                until not AutoRespawn.Enabled
+            end
+        end)
     end
 })
 
