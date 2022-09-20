@@ -8,7 +8,7 @@ local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 
 for _, v in pairs(workspace.Game.Players:GetChildren()) do
-    if v:FindFirstChild("Head") then
+    if v:FindFirstChild("Movement") then
         ESP:Add(v, {
             Name = v.Name,
             Player = Players:FindFirstChild(v.Name),
@@ -27,7 +27,7 @@ ESP:AddObjectListener(workspace.Game.Players, {
     end,
     Color = ESP.Presets.Green,
     Validator = function(obj)
-        return obj:FindFirstChild("Head")
+        return obj:FindFirstChild("Movement")
     end,
     IsEnabled = "plrEsp"
 })
