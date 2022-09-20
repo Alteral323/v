@@ -95,8 +95,8 @@ AutoRespawn = Utility.CreateOptionsButton({
                         end
                     end
                 until not AutoRespawn.Enabled
-            end
-        end)
+            end)
+        end
     end
 })
 
