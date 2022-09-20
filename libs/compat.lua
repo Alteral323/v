@@ -109,7 +109,7 @@ transfer.sandbox = function(url, custom)
 		transfer.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
 		transfer.ImportESP = function()
 			local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua"))()
-			ESP:Toggle(true)
+			ESP:Toggle(false)
 			ESP.Players = false
 			ESP.Tracers = false
 			ESP.Boxes = false
