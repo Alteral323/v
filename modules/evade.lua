@@ -7,30 +7,26 @@ local Utility = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 
-for _, v in pairs(workspace.Game.Players:GetChildren()) do
-    if v:FindFirstChild("Movement") then
-        ESP:Add(v, {
-            Name = v.Name,
-            Player = Players:FindFirstChild(v.Name),
-            PrimaryPart = "HumanoidRootPart",
-            IsEnabled = "plrEsp",
-            Color = ESP.Presets.Green
-        })
+local CharAdded = function(char)
+    if char:FindFirstChild("HRP") then
+        return
     end
+    local p = Players:FindFirstChild(char.Name)
+    if not p or p == Players.LocalPlayer then
+        return
+    end
+    ESP:Add(char, {
+        Name = p.Name,
+        Player = p,
+        PrimaryPart = "HumanoidRootPart",
+        IsEnabled = "plrEsp",
+        Color = ESP.Presets.Green
+    })
 end
-
-ESP:AddObjectListener(workspace.Game.Players, {
-    Type = "Model",
-    PrimaryPart = "HumanoidRootPart",
-    CustomName = function(obj)
-        return tostring(obj.Name)
-    end,
-    Color = ESP.Presets.Green,
-    Validator = function(obj)
-        return obj:FindFirstChild("Movement")
-    end,
-    IsEnabled = "plrEsp"
-})
+workspace.Game.Players.ChildAdded:Connect(CharAdded)
+for i,v in pairs(workspace.Game.Players:GetChildren()) do
+    coroutine.wrap(CharAdded)(v)
+end
 
 ESP:AddObjectListener(workspace.Game.Players, {
     Type = "Model",
