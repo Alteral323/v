@@ -80,7 +80,7 @@ AutoRespawn = Utility.CreateOptionsButton({
         if callback then
             local debounce = false
             spawn(function()
-                repeat
+                repeat wait()
                     if not debounce and LocalPlayer and LocalPlayer:FindFirstChildWhichIsA("PlayerGui") then
                         local PlayerGui = LocalPlayer:FindFirstChildWhichIsA("PlayerGui")
                         if PlayerGui:FindFirstChild("Respawn") and PlayerGui.Respawn:FindFirstChild("RequireRevival") then
