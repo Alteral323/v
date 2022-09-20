@@ -68,7 +68,10 @@ local transfer = {
 	wait = task.wait,
 	spawn = task.spawn
 }
-transfer.sandbox = function(url)
+transfer.sandbox = function(url, custom)
+	if custom and type(custom) == "string" then
+		transfer.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
+	end
 	local module = assert(loadstring(game:HttpGet(url)))
 	setfenv(module, setmetatable(transfer, {__index = getfenv(1)}))
 	return module() or {}
