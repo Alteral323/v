@@ -107,6 +107,15 @@ local transfer = {
 transfer.sandbox = function(url, custom)
 	if custom and type(custom) == "string" then
 		transfer.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
+		transfer.ImportESP = function()
+			local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua"))()
+			ESP:Toggle(true)
+			ESP.Players = false
+			ESP.Tracers = false
+			ESP.Boxes = false
+			ESP.Names = false
+			return ESP
+		end
 	end
 	local module = assert(loadstring(game:HttpGet(url)))
 	setfenv(module, setmetatable(transfer, {__index = getfenv(1)}))
