@@ -83,7 +83,8 @@ KnifeAura = Combat.CreateOptionsButton({
                 until not KnifeAura.Enabled
             end)
         end
-    end
+    end,
+    HoverText = "Stabs monsters close enough"
 })
 
 local GetRoot = function()
@@ -105,5 +106,6 @@ AutoCollect = World.CreateOptionsButton({
         else
             collect:Disconnect()
         end
-    end
+    end,
+    HoverText = "Auto collects powerups"
 })
