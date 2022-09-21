@@ -66,9 +66,9 @@ local GetRoot = function(char)
     return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
 end
 
-local isNear = function(monster, dist)
-    if monster:FindFirstChild("HumanoidRootPart") and GetRoot() then
-        return (GetRoot().Position - monster.HumanoidRootPart.Position).Magnitude <= (dist or 30)
+local isNear = function(entity, distance)
+    if entity:FindFirstChild("HumanoidRootPart") and GetRoot() then
+        return (GetRoot().Position - entity.HumanoidRootPart.Position).Magnitude <= (distance or 30)
     end
     return false
 end
