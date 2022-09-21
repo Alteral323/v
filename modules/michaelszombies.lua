@@ -107,10 +107,7 @@ AutoCollect = World.CreateOptionsButton({
     Function = function(callback)
         if callback then
             collect = workspace.Ignore._Powerups.ChildAdded:Connect(function(obj)
-                obj:WaitForChild("TouchInterest", 10)
-                if obj:FindFirstChild("TouchInterest") then
-                    firetouchinterest(GetRoot(), obj.TouchInterest, 0)
-                end
+                firetouchinterest(GetRoot(), obj, 0)
             end)
         else
             collect:Disconnect()
