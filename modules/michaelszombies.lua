@@ -4,6 +4,7 @@ local ReplicatedStorage = Services.ReplicatedStorage
 
 local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
+local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 ESP.Color = ESP.Presets.Green
 
@@ -81,6 +82,28 @@ KnifeAura = Combat.CreateOptionsButton({
                     end
                 until not KnifeAura.Enabled
             end)
+        end
+    end
+})
+
+local GetRoot = function()
+    local char = LocalPlayer.Character
+    return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso") or {CFrame = "", Position = {X = "0", Y = "0", Z = "0"}}
+end
+
+local AutoCollect = {Enabled = false}
+local collect
+AutoCollect = World.CreateOptionsButton({
+    Name = "AutoCollect",
+    Function = function(callback)
+        if callback then
+            collect = workspace.Ignore._Powerups.ChildAdded:Connect(function(obj)
+                if obj:FindFirstChildWhichIsA("TouchTransmitter") then
+                    firetouchinterest(GetRoot(), obj:FindFirstChildWhichIsA("TouchTransmitter"), 0)
+                end
+            end)
+        else
+            collect:Disconnect()
         end
     end
 })
