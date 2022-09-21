@@ -61,9 +61,14 @@ NewESP.CreateToggle({
     end
 })
 
+local GetRoot = function(char)
+    char = char or LocalPlayer.Character
+    return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
+end
+
 local isNear = function(monster, dist)
-    if monster:FindFirstChild("HumanoidRootPart") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        return (LocalPlayer.Character.HumanoidRootPart.Position - monster.HumanoidRootPart.Position).Magnitude <= (dist or 30)
+    if monster:FindFirstChild("HumanoidRootPart") and GetRoot() then
+        return (GetRoot().Position - monster.HumanoidRootPart.Position).Magnitude <= (dist or 30)
     end
     return false
 end
@@ -95,11 +100,6 @@ KARange = KnifeAura.CreateSlider({
     Default = 100
 })
 
-local GetRoot = function()
-    local char = LocalPlayer.Character
-    return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso") or {CFrame = "", Position = {X = "0", Y = "0", Z = "0"}}
-end
-
 local AutoCollect = {Enabled = false}
 local collect
 AutoCollect = World.CreateOptionsButton({
@@ -107,7 +107,9 @@ AutoCollect = World.CreateOptionsButton({
     Function = function(callback)
         if callback then
             collect = workspace.Ignore._Powerups.ChildAdded:Connect(function(obj)
-                firetouchinterest(GetRoot(), obj, 0)
+                if GetRoot() then
+                    firetouchinterest(GetRoot(), obj, 0)
+                end
             end)
         else
             collect:Disconnect()
