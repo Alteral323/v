@@ -139,25 +139,47 @@ local FastRevive = World.CreateOptionsButton({
 })
 
 local Speed = {Enabled = false}
-local SpeedVal = {Value = 1450}
+local SpeedVal = {Value = 2900}
 Speed = Blatant.CreateOptionsButton({
     Name = "Speed",
     Function = function(callback) end
 })
 SpeedVal = Speed.CreateSlider({
     Name = "Value",
-    Min = 100,
+    Min = 1450,
     Max = 12000,
     Function = function() end,
-    Default = 1450
+    Default = 2900
+})
+
+local JumpPower = {Enabled = false}
+local JumpPowerVal = {Value = 5}
+JumpPower = Blatant.CreateOptionsButton({
+    Name = "JumpPower",
+    Function = function(callback) end
+})
+JumpPowerVal = JumpPower.CreateSlider({
+    Name = "Value",
+    Min = 3,
+    Max = 150,
+    Function = function() end,
+    Default = 5
 })
 
 local old
 old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
     local args = {...}
     local method = getnamecallmethod()
-    if Speed.Enabled and tostring(self) == "Communicator" and method == "InvokeServer" and args[1] == "update" then
-        return SpeedVal.Value, 3
+    if tostring(self) == "Communicator" and method == "InvokeServer" and args[1] == "update" then
+        if Speed.Enabled and JumpPower.Enabled then
+            return SpeedVal.Value, JumpPowerVal.Value
+        end
+        if Speed.Enabled then
+            return SpeedVal.Value, 3
+        end
+        if JumpPower.Enabled then
+            return 1450, JumpPowerVal.Value
+        end
     end
     return old(self, ...)
 end))
