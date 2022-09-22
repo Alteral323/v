@@ -4,7 +4,7 @@ local IDs = {
 }
 local modules = "https://raw.githubusercontent.com/Alteral323/v/main/modules/"
 local compat = "https://raw.githubusercontent.com/Alteral323/v/main/libs/compat.lua"
-local exists = IDs[game.GameId] or IDs[game.PlaceId]
+local exists = IDs[game.PlaceId] or IDs[game.GameId]
 if exists then
     local sandbox = loadstring(game:HttpGet(compat))()
     sandbox(modules .. exists .. ".lua", exists)
