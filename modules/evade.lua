@@ -5,6 +5,7 @@ local ReplicatedStorage = Services.ReplicatedStorage
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
 local Utility = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
+local Blatant = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api
 local ESP = ImportESP()
 ESP.Color = ESP.Presets.Green
 
@@ -63,6 +64,20 @@ NextbotESP.CreateToggle({
     end
 })
 
+local NoCameraShake = {Enabled = false}
+NoCameraShake = Render.CreateOptionsButton({
+    Name = "NoCameraShake",
+    Function = function(callback)
+        if callback then
+            spawn(function()
+                repeat wait(1)
+                    LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
+                until not NoCameraShake.Enabled
+            end)
+        end
+    end
+})
+
 local Respawn
 Respawn = Utility.CreateOptionsButton({
     Name = "Respawn",
@@ -82,16 +97,11 @@ AutoRespawn = Utility.CreateOptionsButton({
             local debounce = false
             spawn(function()
                 repeat wait(1)
-                    if not debounce and LocalPlayer and LocalPlayer:FindFirstChildWhichIsA("PlayerGui") then
-                        local PlayerGui = LocalPlayer:FindFirstChildWhichIsA("PlayerGui")
-                        if PlayerGui:FindFirstChild("Respawn") and PlayerGui.Respawn:FindFirstChild("RequireRevival") then
-                            if PlayerGui.Respawn.RequireRevival.Visible then
-                                wait(2.7)
-                                ReplicatedStorage.Events.Respawn:FireServer()
-                                wait(2)
-                                debounce = false
-                            end
-                        end
+                    if not debounce and LocalPlayer and LocalPlayer:GetAttribute("Downed") == true then
+                        debounce = true
+                        ReplicatedStorage.Events.Respawn:FireServer()
+                        wait(2)
+                        debounce = false
                     end
                 until not AutoRespawn.Enabled
             end)
@@ -116,3 +126,38 @@ SlipperyFloor = World.CreateOptionsButton({
         end
     end
 })
+
+local FastRevive = World.CreateOptionsButton({
+    Name = "FastRevive",
+    Function = function(callback)
+        if callback then
+            workspace.Game.Settings:SetAttribute("ReviveTime", 2.2)
+        else
+            workspace.Game.Settings:SetAttribute("ReviveTime", 3)
+        end
+    end
+})
+
+local Speed = {Enabled = false}
+local SpeedVal = {Value = 1450}
+Speed = Blatant.CreateOptionsButton({
+    Name = "Speed",
+    Function = function(callback) end
+})
+SpeedVal = Speed.CreateSlider({
+    Name = "Value",
+    Min = 100,
+    Max = 12000,
+    Function = function() end,
+    Default = 1450
+})
+
+local old
+old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+    local args = {...}
+    local method = getnamecallmethod()
+    if Speed.Enabled and tostring(self) == "Communicator" and method == "InvokeServer" and args[1] == "update" then
+        return SpeedVal.Value, 3
+    end
+    return old(self, ...)
+end))
