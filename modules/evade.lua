@@ -70,8 +70,8 @@ NoCameraShake = Render.CreateOptionsButton({
     Function = function(callback)
         if callback then
             spawn(function()
-                repeat wait(1)
-                    LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
+                repeat wait(0.1)
+                    LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0, 0, 0) * CFrame.new(0, 0, 0)
                 until not NoCameraShake.Enabled
             end)
         end
@@ -97,7 +97,7 @@ AutoRespawn = Utility.CreateOptionsButton({
             local debounce = false
             spawn(function()
                 repeat wait(1)
-                    if not debounce and LocalPlayer and LocalPlayer:GetAttribute("Downed") == true then
+                    if not debounce and LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:GetAttribute("Downed") == true then
                         debounce = true
                         ReplicatedStorage.Events.Respawn:FireServer()
                         wait(2)
@@ -183,3 +183,17 @@ old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
     end
     return old(self, ...)
 end))
+
+local GlobalChat = {Enabled = false}
+GlobalChat = Blatant.CreateOptionsButton({
+    Name = "GlobalChat",
+    Function = function(callback)
+        spawn(function()
+            repeat wait(0.1)
+                if LocalPlayer and LocalPlayer:FindFirstChild("PlayerScripts") and LocalPlayer.PlayerScripts:FindFirstChild("ChatScript") then
+                    LocalPlayer.PlayerScripts.ChatScript:SetAttribute("GlobalChatEnabled", true)
+                end
+            until not GlobalChat.Enabled
+        end)
+    end
+})
