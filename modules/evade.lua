@@ -70,7 +70,7 @@ NoCameraShake = Render.CreateOptionsButton({
     Function = function(callback)
         if callback then
             spawn(function()
-                repeat wait(0.1)
+                repeat wait()
                     LocalPlayer.PlayerScripts.CameraShake.Value = CFrame.new(0, 0, 0) * CFrame.new(0, 0, 0)
                 until not NoCameraShake.Enabled
             end)
