@@ -23,6 +23,21 @@ ESP:AddObjectListener(workspace, {
     IsEnabled = "nextbotEsp"
 })
 
+ESP:AddObjectListener(workspace, {
+    Type = "Model",
+    Recursive = true,
+    PrimaryPart = "HumanoidRootPart",
+    CustomName = function(obj)
+        return "[DOWNED] " .. tostring(obj.Name)
+    end,
+    Color = ESP.Presets.Blue,
+    Validator = function(obj)
+        return obj:GetAttribute("Downed") and obj:GetAttribute("Downed") == true
+    end,
+    IsEnabled = "downedEsp"
+})
+ESP.downedEsp = true
+
 local NextbotESP = Render.CreateOptionsButton({
     Name = "ESP",
     Function = function(callback)
