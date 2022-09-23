@@ -36,7 +36,6 @@ ESP:AddObjectListener(workspace, {
     end,
     IsEnabled = "downedEsp"
 })
-ESP.downedEsp = true
 
 local NextbotESP = Render.CreateOptionsButton({
     Name = "ESP",
@@ -48,6 +47,13 @@ NextbotESP.CreateToggle({
     Name = "Players",
     Function = function(callback)
         ESP.Players = callback
+    end,
+    Default = true
+})
+NextbotESP.CreateToggle({
+    Name = "Downed",
+    Function = function(callback)
+        ESP.downedEsp = callback
     end,
     Default = true
 })
