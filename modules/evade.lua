@@ -23,62 +23,41 @@ ESP:AddObjectListener(workspace, {
     IsEnabled = "nextbotEsp"
 })
 
-ESP:AddObjectListener(workspace, {
-    Type = "Model",
-    Recursive = true,
-    PrimaryPart = "HumanoidRootPart",
-    CustomName = function(obj)
-        return "[DOWNED] " .. tostring(obj.Name)
-    end,
-    Color = ESP.Presets.Blue,
-    Validator = function(obj)
-        return obj:GetAttribute("Downed") and obj:GetAttribute("Downed") == true
-    end,
-    IsEnabled = "downedEsp"
-})
-
-local NextbotESP = Render.CreateOptionsButton({
+local GameESP = Render.CreateOptionsButton({
     Name = "ESP",
     Function = function(callback)
         ESP:Toggle(callback)
     end
 })
-NextbotESP.CreateToggle({
+GameESP.CreateToggle({
     Name = "Players",
     Function = function(callback)
         ESP.Players = callback
     end,
     Default = true
 })
-NextbotESP.CreateToggle({
-    Name = "Downed",
-    Function = function(callback)
-        ESP.downedEsp = callback
-    end,
-    Default = true
-})
-NextbotESP.CreateToggle({
+GameESP.CreateToggle({
     Name = "Nextbots",
     Function = function(callback)
         ESP.nextbotEsp = callback
     end,
     Default = true
 })
-NextbotESP.CreateToggle({
+GameESP.CreateToggle({
     Name = "Boxes",
     Function = function(callback)
         ESP.Boxes = callback
     end,
     Default = true
 })
-NextbotESP.CreateToggle({
+GameESP.CreateToggle({
     Name = "Nametags",
     Function = function(callback)
         ESP.Names = callback
     end,
     Default = true
 })
-NextbotESP.CreateToggle({
+GameESP.CreateToggle({
     Name = "Tracers",
     Function = function(callback)
         ESP.Tracers = callback
