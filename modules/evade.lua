@@ -99,7 +99,7 @@ AutoRespawn = Utility.CreateOptionsButton({
                     if not debounce and LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:GetAttribute("Downed") == true then
                         debounce = true
                         ReplicatedStorage.Events.Respawn:FireServer()
-                        wait(2)
+                        wait(2.2)
                         debounce = false
                     end
                 until not AutoRespawn.Enabled
