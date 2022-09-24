@@ -7,7 +7,6 @@ local Utility = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local Blatant = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api
 local ESP = ImportESP()
-ESP.Color = ESP.Presets.Green
 
 ESP:AddObjectListener(workspace, {
     Type = "Model",
