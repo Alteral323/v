@@ -6,7 +6,6 @@ local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
-ESP.Color = ESP.Presets.Green
 
 ESP:AddObjectListener(workspace, {
     Type = "Model",
