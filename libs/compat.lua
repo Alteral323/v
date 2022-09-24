@@ -102,6 +102,9 @@ local globals = {
 			networkownertick = tick() + 8
 		end
 		return networkownertick <= tick()
+	end,
+	getcustomasset = getsynasset or getcustomasset or function(location)
+		return "rbxasset://" .. location
 	end
 }
 globals.sandbox = function(url, custom)
@@ -114,6 +117,7 @@ globals.sandbox = function(url, custom)
 			ESP.Tracers = false
 			ESP.Boxes = false
 			ESP.Names = false
+			ESP.Color = ESP.Presets.Green
 			return ESP
 		end
 	end
