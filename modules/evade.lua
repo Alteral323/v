@@ -22,41 +22,41 @@ ESP:AddObjectListener(workspace, {
     IsEnabled = "nextbotEsp"
 })
 
-local GameESP = Render.CreateOptionsButton({
+local NewESP = Render.CreateOptionsButton({
     Name = "ESP",
     Function = function(callback)
         ESP:Toggle(callback)
     end
 })
-GameESP.CreateToggle({
+NewESP.CreateToggle({
     Name = "Players",
     Function = function(callback)
         ESP.Players = callback
     end,
     Default = true
 })
-GameESP.CreateToggle({
+NewESP.CreateToggle({
     Name = "Nextbots",
     Function = function(callback)
         ESP.nextbotEsp = callback
     end,
     Default = true
 })
-GameESP.CreateToggle({
+NewESP.CreateToggle({
     Name = "Boxes",
     Function = function(callback)
         ESP.Boxes = callback
     end,
     Default = true
 })
-GameESP.CreateToggle({
+NewESP.CreateToggle({
     Name = "Nametags",
     Function = function(callback)
         ESP.Names = callback
     end,
     Default = true
 })
-GameESP.CreateToggle({
+NewESP.CreateToggle({
     Name = "Tracers",
     Function = function(callback)
         ESP.Tracers = callback
