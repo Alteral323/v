@@ -105,7 +105,8 @@ local globals = {
 	end,
 	getcustomasset = getsynasset or getcustomasset or function(location)
 		return "rbxasset://" .. location
-	end
+	end,
+	isexecutorclosure = isexecutorclosure or is_synapse_function
 }
 globals.sandbox = function(url, custom)
 	if custom and type(custom) == "string" then
