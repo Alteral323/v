@@ -31,6 +31,7 @@ local newcc = newcclosure or function(f)
 end
 local firetouched = {}
 local networkownertick = tick()
+local oldpairs = pairs
 local globals = {
 	Services = Services,
 	LoadURL = LoadURL,
@@ -106,7 +107,20 @@ local globals = {
 	getcustomasset = getsynasset or getcustomasset or function(location)
 		return "rbxasset://" .. location
 	end,
-	isexecutorclosure = isexecutorclosure or is_synapse_function
+	isexecutorclosure = isexecutorclosure or is_synapse_function,
+	pairs = function(tbl, func)
+		if func and type(func) == "function" then
+			local new = {}
+			for i, v in next, tbl do
+				if func(i, v) then
+					new[#new + 1] = v
+				end
+			end
+			return new
+		else
+			return oldpairs(tbl)
+		end
+	end
 }
 globals.sandbox = function(url, custom)
 	if custom and type(custom) == "string" then
