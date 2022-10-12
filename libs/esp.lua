@@ -8,6 +8,8 @@ local ESP = {
     Names = true,
     TeamColor = true,
     Thickness = 2,
+    Font = "UI",
+    TextSize = 19,
     AttachShift = 1,
     TeamMates = true,
     Players = true,
@@ -18,7 +20,7 @@ local ESP = {
         Blue = Color3.fromRGB(0, 145, 255)
     },
     IgnoreHumanoids = false,
-    Objects = setmetatable({}, {__mode="kv"}),
+    Objects = setmetatable({}, {__mode = "kv"}),
     Overrides = {}
 }
 
@@ -183,6 +185,8 @@ function boxBase:Update()
         color = ESP.HighlightColor
     end
 
+    local IsPlrHighlighted = (ESP.Highlighted == self.Object and self.Player ~= nil)
+
     local cf = self.PrimaryPart.CFrame
     if ESP.FaceCamera then
         cf = CFrame.new(cf.p, cam.CFrame.p)
@@ -211,6 +215,7 @@ function boxBase:Update()
                 self.Components.Quad.PointC = Vector2.new(BottomLeft.X, BottomLeft.Y)
                 self.Components.Quad.PointD = Vector2.new(BottomRight.X, BottomRight.Y)
                 self.Components.Quad.Color = color
+                self.Components.Quad.ZIndex = IsPlrHighlighted and 2 or 1
             else
                 self.Components.Quad.Visible = false
             end
@@ -232,6 +237,14 @@ function boxBase:Update()
             self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
             self.Components.Distance.Text = math.floor((cam.CFrame.p - cf.p).magnitude) .."m away"
             self.Components.Distance.Color = color
+            self.Components["Name"].Size = ESP.FontSize
+            self.Components["Distance"].Size = ESP.FontSize
+            self.Components["Name"].ZIndex = IsPlrHighlighted and 2 or 1
+            self.Components["Distance"].ZIndex = IsPlrHighlighted and 2 or 1
+            if Drawing.Fonts and Drawing.Fonts[ESP.Font] then
+                self.Components["Name"].Font = Drawing.Fonts[ESP.Font]
+                self.Components["Distance"].Font = Drawing.Fonts[ESP.Font]
+            end
         else
             self.Components.Name.Visible = false
             self.Components.Distance.Visible = false
@@ -249,6 +262,7 @@ function boxBase:Update()
             self.Components.Tracer.From = Vector2.new(TorsoPos.X, TorsoPos.Y)
             self.Components.Tracer.To = Vector2.new(cam.ViewportSize.X/2,cam.ViewportSize.Y/ESP.AttachShift)
             self.Components.Tracer.Color = color
+            self.Components["Tracer"].ZIndex = IsPlrHighlighted and 2 or 1
         else
             self.Components.Tracer.Visible = false
         end
@@ -293,14 +307,14 @@ function ESP:Add(obj, options)
 		Color = box.Color,
 		Center = true,
 		Outline = true,
-        Size = 19,
+        Size = self.TextSize,
         Visible = self.Enabled and self.Names
 	})
 	box.Components["Distance"] = Draw("Text", {
 		Color = box.Color,
 		Center = true,
 		Outline = true,
-        Size = 19,
+        Size = self.TextSize,
         Visible = self.Enabled and self.Names
 	})
 
