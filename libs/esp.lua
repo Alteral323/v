@@ -17,6 +17,7 @@ local ESP = {
         Orange = Color3.fromRGB(255, 162, 0),
         Blue = Color3.fromRGB(0, 145, 255)
     },
+    IgnoreHumanoids = false,
     Objects = setmetatable({}, {__mode="kv"}),
     Overrides = {}
 }
@@ -322,8 +323,8 @@ function ESP:Add(obj, options)
         end
     end)
 
-    local hum = obj:FindFirstChildOfClass("Humanoid")
-	if hum then
+    local hum = obj:FindFirstChildWhichIsA("Humanoid")
+	if hum and (not ESP.IgnoreHumanoids) then
         hum.Died:Connect(function()
             if ESP.AutoRemove ~= false then
                 box:Remove()
