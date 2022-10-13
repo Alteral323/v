@@ -218,6 +218,5 @@ spawn(function()
 end)
 AutoBhop = Blatant.CreateOptionsButton({
     Name = "AutoBhop",
-    Function = function()
-    end
+    Function = function() end
 })
