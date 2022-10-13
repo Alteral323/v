@@ -32,9 +32,8 @@ local WorldToViewportPoint = cam.WorldToViewportPoint
 
 local function Draw(obj, props)
 	local new = Drawing.new(obj)
-	
 	props = props or {}
-	for i,v in pairs(props) do
+	for i, v in pairs(props) do
 		new[i] = v
 	end
 	return new
