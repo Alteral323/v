@@ -188,3 +188,35 @@ GlobalChat = Blatant.CreateOptionsButton({
         end)
     end
 })
+
+local AutoBhop = {Enabled = false}
+LocalPlayer.CharacterAdded:Connect(function(character)
+    repeat wait() until character:FindFirstChildWhichIsA("Humanoid") == true
+    local Humanoid = character:FindFirstChildWhichIsA("Humanoid")
+    if Humanoid then
+        Humanoid.StateChanged:Connect(function(State)
+            if AutoBhop.Enabled then
+                if State == Enum.HumanoidStateType.Landed then
+                    Humanoid:ChangeState(Enum.HumanoidStateType.Landed.Jumping)
+                end
+            end
+        end)
+    end
+end)
+spawn(function()
+    repeat wait() until character:FindFirstChildWhichIsA("Humanoid") == true
+    if Humanoid then
+        Humanoid.StateChanged:Connect(function(State)
+            if AutoBhop.Enabled then
+                if State == Enum.HumanoidStateType.Landed then
+                    Humanoid:ChangeState(Enum.HumanoidStateType.Landed.Jumping)
+                end
+            end
+        end)
+    end
+end)
+AutoBhop = Blatant.CreateOptionsButton({
+    Name = "AutoBhop",
+    Function = function()
+    end
+})
