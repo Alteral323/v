@@ -204,7 +204,8 @@ LocalPlayer.CharacterAdded:Connect(function(character)
     end
 end)
 spawn(function()
-    repeat wait() until character:FindFirstChildWhichIsA("Humanoid") == true
+    repeat wait() until LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid") == true
+    local Humanoid = LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
     if Humanoid then
         Humanoid.StateChanged:Connect(function(State)
             if AutoBhop.Enabled then
