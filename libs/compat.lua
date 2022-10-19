@@ -23,12 +23,6 @@ local LoadURL = function(url)
 	return loadstring(game:HttpGet(url))()
 end
 local gsub = string.gsub
-local sethid = sethiddenproperty or set_hidden_property or set_hidden_prop
-local gethid = gethiddenproperty or get_hidden_property or get_hidden_prop
-local setsim = setsimulationradius or set_simulation_radius
-local newcc = newcclosure or function(f)
-	return f
-end
 local firetouched = {}
 local networkownertick = tick()
 local oldpairs = pairs
@@ -36,9 +30,9 @@ local globals = {}
 
 globals.Services = Services
 globals.LoadURL = LoadURL
-globals.sethiddenproperty = sethid
-globals.gethiddenproperty = gethid
-globals.setsimulationradius = setsim
+globals.sethiddenproperty = sethiddenproperty or set_hidden_property or set_hidden_prop
+globals.gethiddenproperty = gethiddenproperty or get_hidden_property or get_hidden_prop
+globals.setsimulationradius = setsimulationradius or set_simulation_radius
 globals.request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 globals.queue_on_teleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 globals.gethui = get_hidden_gui or gethui
@@ -62,7 +56,9 @@ end
 globals.checkcaller = checkcaller or function()
 	return false
 end
-globals.newcclosure = newcc
+globals.newcclosure = newcclosure or function(f)
+	return f
+end
 globals.setreadonly = setreadonly or (make_writeable and function(tbl, readonly)
 	if readonly then
 		make_readonly(tbl)
@@ -85,7 +81,7 @@ globals.hookfunction = hookfunction or function(func, newfunc, applycclosure)
 		replaceclosure(func, newfunc)
 		return func
 	end
-	func = applycclosure and newcc or newfunc
+	func = applycclosure and globals.newcclosure or newfunc
 	return func
 end
 globals.hookmetamethod or (globals.hookfunction and function(object, method, hook)
@@ -103,8 +99,8 @@ globals.firetouchinterest = firetouchinterest or function(part1, part2, toggle)
 	end
 end
 globals.isnetworkowner = isnetworkowner or function(part)
-	if gethid(part, "NetworkOwnershipRule") == Enum.NetworkOwnership.Manual then 
-		sethid(part, "NetworkOwnershipRule", Enum.NetworkOwnership.Automatic)
+	if globals.gethiddenproperty(part, "NetworkOwnershipRule") == Enum.NetworkOwnership.Manual then 
+		globals.sethiddenproperty(part, "NetworkOwnershipRule", Enum.NetworkOwnership.Automatic)
 		networkownertick = tick() + 8
 	end
 	return networkownertick <= tick()
