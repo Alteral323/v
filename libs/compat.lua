@@ -78,6 +78,7 @@ local globals = {
 	getconstants = (debug and debug.getconstants) or getconstants or getconsts,
 	setupvalue = (debug and debug.setupvalue) or setupvalue or setupval,
 	setconstant = (debug and debug.setconstant) or setconstant or setconst,
+	getinfo = getinfo or (debug and (debug.getinfo or debug.info)),
 	hookfunction = hookfunction or function(func, newfunc, applycclosure)
 		if replaceclosure then
 			replaceclosure(func, newfunc)
