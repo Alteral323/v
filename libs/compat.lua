@@ -84,7 +84,7 @@ globals.hookfunction = hookfunction or function(func, newfunc, applycclosure)
 	func = applycclosure and globals.newcclosure or newfunc
 	return func
 end
-globals.hookmetamethod or (globals.hookfunction and function(object, method, hook)
+globals.hookmetamethod = hookmetamethod or (globals.hookfunction and function(object, method, hook)
 	return globals.hookfunction(globals.getrawmetatable(object)[method], hook)
 end)
 globals.firetouchinterest = firetouchinterest or function(part1, part2, toggle)
