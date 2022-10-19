@@ -32,97 +32,100 @@ end
 local firetouched = {}
 local networkownertick = tick()
 local oldpairs = pairs
-local globals = {
-	Services = Services,
-	LoadURL = LoadURL,
-	sethiddenproperty = sethid,
-	gethiddenproperty = gethid,
-	setsimulationradius = setsim,
-	request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request,
-	queue_on_teleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport),
-	gethui = get_hidden_gui or gethui,
-	setclipboard = setclipboard or toclipboard or set_clipboard or (Clipboard and Clipboard.set),
-	isfile = isfile or (readfile and function(...)
-		local success, _ = pcall(readfile, ...)
-		return success
-	end),
-	cleanfile = function(str)
-		return gsub(str, "[*\\?:<>|]+", "")
-	end,
-	getconnections = getconnections or get_signal_cons,
-	setthreadidentity = (syn and syn.set_thread_identity) or setthreadidentity or syn_context_set or setthreadcontext,
-	getthreadidentity = (syn and syn.get_thread_identity) or getthreadidentity or syn_context_get or getthreadcontext,
-	getnamecallmethod = getnamecallmethod or get_namecall_method or function()
-		return ""
-	end,
-	getrawmetatable = getrawmetatable or function()
-		return setmetatable({}, {})
-	end,
-	checkcaller = checkcaller or function()
-		return false
-	end,
-	newcclosure = newcc,
-	setreadonly = setreadonly or (make_writeable and function(tbl, readonly)
-		if readonly then
-			make_readonly(tbl)
-		else
-			make_writeable(tbl)
-		end
-	end),
-	isreadyonly = isreadonly or is_readonly,
-	getscriptclosure = getscriptclosure or get_script_function,
-	getgc = getgc or get_gc_objects,
-	wait = task.wait,
-	spawn = task.spawn,
-	getupvalues = (debug and debug.getupvalues) or getupvalues or getupvals,
-	getconstants = (debug and debug.getconstants) or getconstants or getconsts,
-	setupvalue = (debug and debug.setupvalue) or setupvalue or setupval,
-	setconstant = (debug and debug.setconstant) or setconstant or setconst,
-	getinfo = getinfo or (debug and (debug.getinfo or debug.info)),
-	hookfunction = hookfunction or function(func, newfunc, applycclosure)
-		if replaceclosure then
-			replaceclosure(func, newfunc)
-			return func
-		end
-		func = applycclosure and newcc or newfunc
+local globals = {}
+
+globals.Services = Services
+globals.LoadURL = LoadURL
+globals.sethiddenproperty = sethid
+globals.gethiddenproperty = gethid
+globals.setsimulationradius = setsim
+globals.request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
+globals.queue_on_teleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+globals.gethui = get_hidden_gui or gethui
+globals.setclipboard = setclipboard or toclipboard or set_clipboard or (Clipboard and Clipboard.set)
+globals.isfile = isfile or (readfile and function(...)
+	local success, _ = pcall(readfile, ...)
+	return success
+end)
+globals.cleanfile = function(str)
+	return gsub(str, "[*\\?:<>|]+", "")
+end
+globals.getconnections = getconnections or get_signal_cons
+globals.setthreadidentity = (syn and syn.set_thread_identity) or setthreadidentity or syn_context_set or setthreadcontext
+globals.getthreadidentity = (syn and syn.get_thread_identity) or getthreadidentity or syn_context_get or getthreadcontext
+globals.getnamecallmethod = getnamecallmethod or get_namecall_method or function()
+	return ""
+end
+globals.getrawmetatable = getrawmetatable or (debug and debug.getmetatable) or function()
+	return setmetatable({}, {})
+end
+globals.checkcaller = checkcaller or function()
+	return false
+end
+globals.newcclosure = newcc
+globals.setreadonly = setreadonly or (make_writeable and function(tbl, readonly)
+	if readonly then
+		make_readonly(tbl)
+	else
+		make_writeable(tbl)
+	end
+end)
+globals.isreadyonly = isreadonly or is_readonly
+globals.getscriptclosure = getscriptclosure or get_script_function
+globals.getgc = getgc or get_gc_objects
+globals.wait = task.wait
+globals.spawn = task.spawn
+globals.getupvalues = (debug and debug.getupvalues) or getupvalues or getupvals
+globals.getconstants = (debug and debug.getconstants) or getconstants or getconsts
+globals.setupvalue = (debug and debug.setupvalue) or setupvalue or setupval
+globals.setconstant = (debug and debug.setconstant) or setconstant or setconst
+globals.getinfo = getinfo or (debug and (debug.getinfo or debug.info))
+globals.hookfunction = hookfunction or function(func, newfunc, applycclosure)
+	if replaceclosure then
+		replaceclosure(func, newfunc)
 		return func
-	end,
-	firetouchinterest = firetouchinterest or function(part1, part2, toggle)
-		if part1 and part2 then
-			if toggle == 0 then
-				firetouched[1] = part1.CFrame
-				part1.CFrame = part2.CFrame
-			else
-				part1.CFrame = firetouched[1]
-				firetouched[1] = nil
-			end
-		end
-	end,
-	isnetworkowner = isnetworkowner or function(part)
-		if gethid(part, "NetworkOwnershipRule") == Enum.NetworkOwnership.Manual then 
-			sethid(part, "NetworkOwnershipRule", Enum.NetworkOwnership.Automatic)
-			networkownertick = tick() + 8
-		end
-		return networkownertick <= tick()
-	end,
-	getcustomasset = getsynasset or getcustomasset or function(location)
-		return "rbxasset://" .. location
-	end,
-	isexecutorclosure = isexecutorclosure or is_synapse_function,
-	pairs = function(tbl, func)
-		if func and type(func) == "function" then
-			local new = {}
-			for i, v in next, tbl do
-				if func(i, v) then
-					new[#new + 1] = v
-				end
-			end
-			return new
+	end
+	func = applycclosure and newcc or newfunc
+	return func
+end
+globals.hookmetamethod or (globals.hookfunction and function(object, method, hook)
+	return globals.hookfunction(globals.getrawmetatable(object)[method], hook)
+end)
+globals.firetouchinterest = firetouchinterest or function(part1, part2, toggle)
+	if part1 and part2 then
+		if toggle == 0 then
+			firetouched[1] = part1.CFrame
+			part1.CFrame = part2.CFrame
 		else
-			return oldpairs(tbl)
+			part1.CFrame = firetouched[1]
+			firetouched[1] = nil
 		end
 	end
-}
+end
+globals.isnetworkowner = isnetworkowner or function(part)
+	if gethid(part, "NetworkOwnershipRule") == Enum.NetworkOwnership.Manual then 
+		sethid(part, "NetworkOwnershipRule", Enum.NetworkOwnership.Automatic)
+		networkownertick = tick() + 8
+	end
+	return networkownertick <= tick()
+end
+globals.getcustomasset = getsynasset or getcustomasset or function(location)
+	return "rbxasset://" .. location
+end
+globals.isexecutorclosure = isexecutorclosure or is_synapse_function
+globals.pairs = function(tbl, func)
+	if func and type(func) == "function" then
+		local new = {}
+		for i, v in next, tbl do
+			if func(i, v) then
+				new[#new + 1] = v
+			end
+		end
+		return new
+	else
+		return oldpairs(tbl)
+	end
+end
 globals.sandbox = function(url, custom)
 	if custom and type(custom) == "string" then
 		globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
@@ -143,4 +146,5 @@ globals.sandbox = function(url, custom)
 	setfenv(module, setmetatable(globals, {__index = getfenv(1)}))
 	return module() or {}
 end
+
 return globals.sandbox
