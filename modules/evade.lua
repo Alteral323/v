@@ -189,6 +189,7 @@ GlobalChat = Blatant.CreateOptionsButton({
     end
 })
 
+--[[
 local AutoBhop = {Enabled = false}
 LocalPlayer.CharacterAdded:Connect(function(character)
     repeat wait() until character:FindFirstChildWhichIsA("Humanoid") == true
@@ -220,3 +221,4 @@ AutoBhop = Blatant.CreateOptionsButton({
     Name = "AutoBhop",
     Function = function() end
 })
+]]
