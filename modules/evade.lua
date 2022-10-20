@@ -91,24 +91,10 @@ Respawn = Utility.CreateOptionsButton({
 local AutoRespawn = {Enabled = false}
 AutoRespawn = Utility.CreateOptionsButton({
     Name = "AutoRespawn",
-    Function = function(callback)
-        if callback then
-            local debounce = false
-            spawn(function()
-                repeat wait(1)
-                    if not debounce and LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:GetAttribute("Downed") == true then
-                        debounce = true
-                        ReplicatedStorage.Events.Respawn:FireServer()
-                        wait(2.2)
-                        debounce = false
-                    end
-                until not AutoRespawn.Enabled
-            end)
-        end
-    end
+    Function = function() end
 })
 
-local SlipperyFloor
+local SlipperyFloor = {Enabled = false}
 SlipperyFloor = World.CreateOptionsButton({
     Name = "SlipperyFloor",
     Function = function(callback)
@@ -165,16 +151,6 @@ JumpPowerVal = JumpPower.CreateSlider({
     Default = 5
 })
 
-local old
-old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
-    local args = {...}
-    local method = getnamecallmethod()
-    if tostring(self) == "Communicator" and method == "InvokeServer" and args[1] == "update" then
-        return (Speed.Enabled and SpeedVal.Value) or 1450, (JumpPower.Enabled and JumpPowerVal.Value) or 3
-    end
-    return old(self, ...)
-end))
-
 local GlobalChat = {Enabled = false}
 GlobalChat = Blatant.CreateOptionsButton({
     Name = "GlobalChat",
@@ -189,36 +165,29 @@ GlobalChat = Blatant.CreateOptionsButton({
     end
 })
 
---[[
-local AutoBhop = {Enabled = false}
+local old
+old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+    local args = {...}
+    local method = getnamecallmethod()
+    if tostring(self) == "Communicator" and method == "InvokeServer" and args[1] == "update" then
+        return (Speed.Enabled and SpeedVal.Value) or 1450, (JumpPower.Enabled and JumpPowerVal.Value) or 3
+    end
+    return old(self, ...)
+end))
+
 LocalPlayer.CharacterAdded:Connect(function(character)
-    repeat wait() until character:FindFirstChildWhichIsA("Humanoid") == true
-    local Humanoid = character:FindFirstChildWhichIsA("Humanoid")
-    if Humanoid then
-        Humanoid.StateChanged:Connect(function(State)
-            if AutoBhop.Enabled then
-                if State == Enum.HumanoidStateType.Landed then
-                    Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-                end
+    character:GetAttributeChangedSignal("Downed"):Connect(function()
+        if character:GetAttribute("Downed") == true then
+            if AutoRespawn.Enabled then
+                ReplicatedStorage.Events.Respawn:FireServer()
             end
-        end)
+        end
+    end)
+    if SlipperyFloor.Enabled then
+        character:WaitForChild("Movement", 10)
+        local movement = character:FindFirstChild("Movement")
+        if movement then
+            setconstant(require(movement).ApplyFriction, 9, 0.1)
+        end
     end
 end)
-spawn(function()
-    repeat wait() until LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid") == true
-    local Humanoid = LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
-    if Humanoid then
-        Humanoid.StateChanged:Connect(function(State)
-            if AutoBhop.Enabled then
-                if State == Enum.HumanoidStateType.Landed then
-                    Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-                end
-            end
-        end)
-    end
-end)
-AutoBhop = Blatant.CreateOptionsButton({
-    Name = "AutoBhop",
-    Function = function() end
-})
-]]
