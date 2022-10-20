@@ -123,6 +123,13 @@ globals.pairs = function(tbl, func)
 	end
 end
 globals.sandbox = function(url, custom)
+	if type(url) ~= "string" and url == true then
+		local genv = getgenv()
+		for i, v in pairs(globals) do
+			genv[i] = v
+		end
+		return {}
+	end
 	if custom and type(custom) == "string" then
 		globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
 		globals.ImportESP = function()
