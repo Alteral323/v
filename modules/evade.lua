@@ -175,6 +175,14 @@ old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
     return old(self, ...)
 end))
 
+LocalPlayer.Character:GetAttributeChangedSignal("Downed"):Connect(function()
+    if LocalPlayer.Character:GetAttribute("Downed") == true then
+        if AutoRespawn.Enabled then
+            ReplicatedStorage.Events.Respawn:FireServer()
+        end
+    end
+end)
+
 LocalPlayer.CharacterAdded:Connect(function(character)
     character:GetAttributeChangedSignal("Downed"):Connect(function()
         if character:GetAttribute("Downed") == true then
