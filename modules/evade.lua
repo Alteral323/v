@@ -194,7 +194,7 @@ if LocalPlayer.Character then
         Humanoid.StateChanged:Connect(function(State)
             if AutoBhop.Enabled then
                 if State == Enum.HumanoidStateType.Landed then
-                    Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                    if Humanoid then Humanoid:ChangeState(Enum.HumanoidStateType.Jumping) end
                 end
             end
         end)
@@ -208,7 +208,7 @@ LocalPlayer.CharacterAdded:Connect(function(character)
         humanoid.StateChanged:Connect(function(State)
             if AutoBhop.Enabled then
                 if State == Enum.HumanoidStateType.Landed then
-                    Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                    if Humanoid then Humanoid:ChangeState(Enum.HumanoidStateType.Jumping) end
                 end
             end
         end)
