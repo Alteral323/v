@@ -165,6 +165,12 @@ GlobalChat = Blatant.CreateOptionsButton({
     end
 })
 
+local AutoBhop = {Enabled = false}
+AutoBhop = Blatant.CreateOptionsButton({
+    Name = "AutoBhop",
+    Function = function() end
+})
+
 local old
 old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
     local args = {...}
@@ -180,6 +186,31 @@ LocalPlayer.Character:GetAttributeChangedSignal("Downed"):Connect(function()
         if AutoRespawn.Enabled then
             ReplicatedStorage.Events.Respawn:FireServer()
         end
+    end
+end)
+
+if LocalPlayer.Character:FindFirstChild("Humanoid") then
+    local Humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
+    Humanoid.StateChanged:Connect(function(State)
+        if AutoBhop.Enabled then
+            if State == Enum.HumanoidStateType.Landed then
+                Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
+        end
+    end)
+end
+
+LocalPlayer.CharacterAdded:Connect(function(character)
+    character:WaitForChild("Humanoid", 10)
+    local humanoid = character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.StateChanged:Connect(function(State)
+            if AutoBhop.Enabled then
+                if State == Enum.HumanoidStateType.Landed then
+                    Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                end
+            end
+        end)
     end
 end)
 
