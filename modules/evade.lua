@@ -181,23 +181,24 @@ old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
     return old(self, ...)
 end))
 
-LocalPlayer.Character:GetAttributeChangedSignal("Downed"):Connect(function()
-    if LocalPlayer.Character:GetAttribute("Downed") == true then
-        if AutoRespawn.Enabled then
-            ReplicatedStorage.Events.Respawn:FireServer()
-        end
-    end
-end)
-
-if LocalPlayer.Character:FindFirstChild("Humanoid") then
-    local Humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
-    Humanoid.StateChanged:Connect(function(State)
-        if AutoBhop.Enabled then
-            if State == Enum.HumanoidStateType.Landed then
-                Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+if LocalPlayer.Character then
+    LocalPlayer.Character:GetAttributeChangedSignal("Downed"):Connect(function()
+        if LocalPlayer.Character:GetAttribute("Downed") == true then
+            if AutoRespawn.Enabled then
+                ReplicatedStorage.Events.Respawn:FireServer()
             end
         end
     end)
+    if LocalPlayer.Character:FindFirstChild("Humanoid") then
+        local Humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
+        Humanoid.StateChanged:Connect(function(State)
+            if AutoBhop.Enabled then
+                if State == Enum.HumanoidStateType.Landed then
+                    Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                end
+            end
+        end)
+    end
 end
 
 LocalPlayer.CharacterAdded:Connect(function(character)
