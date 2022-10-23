@@ -13,7 +13,7 @@ ESP:AddObjectListener(workspace, {
     Recursive = true,
     PrimaryPart = "HumanoidRootPart",
     CustomName = function(obj)
-        return tostring(obj.Name)
+        return "[AI] " .. tostring(obj.Name)
     end,
     Color = ESP.Presets.Red,
     Validator = function(obj)
