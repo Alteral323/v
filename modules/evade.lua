@@ -1,6 +1,7 @@
 local Players = Services.Players
 local LocalPlayer = Players.LocalPlayer
 local ReplicatedStorage = Services.ReplicatedStorage
+local Lighting = Services.Lighting
 
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
 local Utility = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api
@@ -75,6 +76,27 @@ NewESP.CreateToggle({
     Name = "Tracers",
     Function = function(callback)
         ESP.Tracers = callback
+    end
+})
+
+local Fullbright = Render.CreateOptionsButton({
+    Name = "Fullbright",
+    Function = function(callback)
+        if callback then
+            Lighting.Brightness = 4
+            Lighting.FogEnd = 100000
+            Lighting.GlobalShadows = false
+            Lighting.ClockTime = 12
+        else
+            if workspace:FindFirstChild("Game") and workspace.Game:FindFirstChild("Map") and workspace.Game.Map:FindFirstChild("Lighting") and workspace.Game.Map.Lighting:FindFirstChild("Stats") then
+                local stats = require(workspace.Game.Map.Lighting.Stats)
+                if type(stats) == "table" then
+                    for i, v in pairs(stats) do
+                        Lighting[i] = v
+                    end
+                end
+            end
+        end
     end
 })
 
