@@ -22,6 +22,14 @@ ESP:AddObjectListener(workspace, {
     IsEnabled = "nextbotEsp"
 })
 
+ESP.Overrides.GetColor = function(character)
+    local player = ESP:GetPlrFromChar(character)
+    if player and ESP.downedEsp and player.Character:GetAttribute("Downed") == true then
+        return ESP.Presets.Blue
+    end
+    return ESP.Color
+ end
+
 local NewESP = Render.CreateOptionsButton({
     Name = "ESP",
     Function = function(callback)
@@ -32,6 +40,13 @@ NewESP.CreateToggle({
     Name = "Players",
     Function = function(callback)
         ESP.Players = callback
+    end,
+    Default = true
+})
+NewESP.CreateToggle({
+    Name = "Downed",
+    Function = function(callback)
+        ESP.downedEsp = callback
     end,
     Default = true
 })
