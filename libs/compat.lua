@@ -11,9 +11,9 @@ local Services = {
 }
 setmetatable(Services, {
 	__index = function(self, name)
-		local suc, res = pcall(game.GetService, game, name)
+		local suc, result = pcall(game.GetService, game, name)
 		if suc then
-			res = cloneref(res)
+			local res = cloneref(result)
 			Services[name] = res
 			return res
 		end
@@ -136,7 +136,7 @@ globals.sandbox = function(url, custom)
 	if custom and type(custom) == "string" then
 		globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
 		globals.ImportESP = function()
-			local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua"))()
+			local ESP = globals.sandbox("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua")
 			ESP:Toggle(false)
 			ESP.Players = false
 			ESP.Tracers = false
@@ -145,8 +145,8 @@ globals.sandbox = function(url, custom)
 			ESP.Color = ESP.Presets.Green
 			return ESP
 		end
-		globals.maid = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua"))()
-		globals.signal = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua"))()
+		globals.maid = globals.sandbox("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
+		globals.signal = globals.sandbox("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
 	end
 	local module = assert(loadstring(game:HttpGet(url)))
 	setfenv(module, setmetatable(globals, {__index = getfenv(1)}))
