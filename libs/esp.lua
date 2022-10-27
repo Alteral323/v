@@ -23,7 +23,7 @@ local ESP = {
 }
 
 local cam = workspace.CurrentCamera
-local plrs = game:GetService("Players")
+local plrs = Services.Players
 local plr = plrs.LocalPlayer
 local mouse = plr:GetMouse()
 
@@ -369,7 +369,7 @@ for i,v in pairs(plrs:GetPlayers()) do
     end
 end
 
-game:GetService("RunService").RenderStepped:Connect(function()
+Services.RunService.RenderStepped:Connect(function()
     cam = workspace.CurrentCamera
     for i,v in (ESP.Enabled and pairs or ipairs)(ESP.Objects) do
         if v.Update then
