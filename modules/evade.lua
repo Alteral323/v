@@ -239,7 +239,7 @@ if LocalPlayer.Character then
 end
 
 LocalPlayer.CharacterAdded:Connect(function(character)
-    character:WaitForChild("Humanoid", 10)
+    character:WaitForChild("Humanoid", 1000)
     local humanoid = character:FindFirstChild("Humanoid")
     if humanoid then
         humanoid.StateChanged:Connect(function(State)
@@ -261,7 +261,7 @@ LocalPlayer.CharacterAdded:Connect(function(character)
         end
     end)
     if SlipperyFloor.Enabled then
-        character:WaitForChild("Movement", 10)
+        character:WaitForChild("Movement", 1000)
         local movement = character:FindFirstChild("Movement")
         if movement then
             setconstant(require(movement).ApplyFriction, 9, 0.1)
