@@ -1,17 +1,19 @@
+local cloneref = cloneref or function(o) return o end
 local Services = {
-	Players = game:GetService("Players"),
-	Workspace = game:GetService("Workspace"),
-	CoreGui = game:GetService("CoreGui"),
-	ReplicatedStorage = game:GetService("ReplicatedStorage"),
-	RunService = game:GetService("RunService"),
-	HttpService = game:GetService("HttpService"),
-	UserInputService = game:GetService("UserInputService"),
-	InsertService = game:GetService("InsertService")
+	Players = cloneref(game:GetService("Players")),
+	Workspace = cloneref(game:GetService("Workspace")),
+	CoreGui = cloneref(game:GetService("CoreGui")),
+	ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage")),
+	RunService = cloneref(game:GetService("RunService")),
+	HttpService = cloneref(game:GetService("HttpService")),
+	UserInputService = cloneref(game:GetService("UserInputService")),
+	InsertService = cloneref(game:GetService("InsertService"))
 }
 setmetatable(Services, {
 	__index = function(self, name)
 		local suc, res = pcall(game.GetService, game, name)
 		if suc then
+			res = cloneref(res)
 			Services[name] = res
 			return res
 		end
@@ -122,6 +124,7 @@ globals.pairs = function(tbl, func)
 		return oldpairs(tbl)
 	end
 end
+globals.cloneref = cloneref
 globals.sandbox = function(url, custom)
 	if type(url) ~= "string" and url == true then
 		local genv = getgenv()
