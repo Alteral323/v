@@ -152,11 +152,7 @@ SlipperyFloor = World.CreateOptionsButton({
 local FastRevive = World.CreateOptionsButton({
     Name = "FastRevive",
     Function = function(callback)
-        if callback then
-            workspace.Game.Settings:SetAttribute("ReviveTime", 2.2)
-        else
-            workspace.Game.Settings:SetAttribute("ReviveTime", 3)
-        end
+        workspace.Game.Settings:SetAttribute("ReviveTime", callback and 3 or 2.2)
     end
 })
 
@@ -220,19 +216,15 @@ end))
 
 if LocalPlayer.Character then
     LocalPlayer.Character:GetAttributeChangedSignal("Downed"):Connect(function()
-        if LocalPlayer.Character:GetAttribute("Downed") == true then
-            if AutoRespawn.Enabled then
-                ReplicatedStorage.Events.Respawn:FireServer()
-            end
+        if LocalPlayer.Character:GetAttribute("Downed") == true and AutoRespawn.Enabled then
+            ReplicatedStorage.Events.Respawn:FireServer()
         end
     end)
     if LocalPlayer.Character:FindFirstChild("Humanoid") then
         local Humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
         Humanoid.StateChanged:Connect(function(State)
-            if AutoBhop.Enabled then
-                if State == Enum.HumanoidStateType.Landed then
-                    if Humanoid then Humanoid:ChangeState(Enum.HumanoidStateType.Jumping) end
-                end
+            if Humanoid and AutoBhop.Enabled and State == Enum.HumanoidStateType.Landed then
+                Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
             end
         end)
     end
@@ -240,13 +232,11 @@ end
 
 LocalPlayer.CharacterAdded:Connect(function(character)
     character:WaitForChild("Humanoid", 1000)
-    local humanoid = character:FindFirstChild("Humanoid")
-    if humanoid then
-        humanoid.StateChanged:Connect(function(State)
-            if AutoBhop.Enabled then
-                if State == Enum.HumanoidStateType.Landed then
-                    if Humanoid then Humanoid:ChangeState(Enum.HumanoidStateType.Jumping) end
-                end
+    local Humanoid = character:FindFirstChild("Humanoid")
+    if Humanoid then
+        Humanoid.StateChanged:Connect(function(State)
+            if Humanoid and AutoBhop.Enabled and State == Enum.HumanoidStateType.Landed then
+                Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
             end
         end)
     end
@@ -254,10 +244,8 @@ end)
 
 LocalPlayer.CharacterAdded:Connect(function(character)
     character:GetAttributeChangedSignal("Downed"):Connect(function()
-        if character:GetAttribute("Downed") == true then
-            if AutoRespawn.Enabled then
-                ReplicatedStorage.Events.Respawn:FireServer()
-            end
+        if character:GetAttribute("Downed") == true and AutoRespawn.Enabled then
+            ReplicatedStorage.Events.Respawn:FireServer()
         end
     end)
     if SlipperyFloor.Enabled then
