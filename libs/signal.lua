@@ -7,7 +7,8 @@
 -- Roblox's deep copy method parses to a non-lua table compatable format.
 -- @classmod Signal
 
-local HttpService = Services.HttpService
+local cloneref = cloneref or function(o) return o end
+local HttpService = cloneref(game:GetService("HttpService"))
 
 local ENABLE_TRACEBACK = false
 
