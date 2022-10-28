@@ -11,6 +11,7 @@ local ESP = {
     AttachShift = 1,
     TeamMates = true,
     Players = true,
+    Health = false,
     Presets = {
         Green = Color3.fromRGB(0, 255, 154),
         Red = Color3.fromRGB(255, 0, 128),
@@ -73,6 +74,18 @@ function ESP:GetPlrFromChar(char)
 	end
 	
 	return plrs:GetPlayerFromCharacter(char)
+end
+
+function ESP:GetHealth(char)
+	local ov = self.Overrides.GetHealth
+	if ov then
+		return ov(char)
+	end
+	local player = self:GetPlrFromChar(char)
+    if player and player:FindFirstChildOfClass("Humanoid") then
+        return player:FindFirstChildOfClass("Humanoid").Health, player:FindFirstChildOfClass("Humanoid").MaxHealth
+    end
+	return 100, 100
 end
 
 function ESP:Toggle(bool)
@@ -224,7 +237,12 @@ function boxBase:Update()
         if Vis5 then
             self.Components.Name.Visible = true
             self.Components.Name.Position = Vector2.new(TagPos.X, TagPos.Y)
-            self.Components.Name.Text = self.Name
+            if ESP.Health and self.Player then
+                local health, maxhealth = ESP:GetHealth(self.Player)
+                self.Components.Name.Text = self.Name .. (" [%s/%s]"):format(health, maxhealth)
+            else
+                self.Components.Name.Text = self.Name
+            end
             self.Components.Name.Color = color
 
             self.Components.Distance.Visible = true
