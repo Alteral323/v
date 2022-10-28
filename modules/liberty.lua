@@ -5,7 +5,6 @@ local UserInputService = Services.UserInputService
 
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
 local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
-local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 
 ESP.Overrides.GetColor = function(character)
