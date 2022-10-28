@@ -6,6 +6,7 @@ local UserInputService = Services.UserInputService
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
 local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
+local Blatant = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api
 local ESP = ImportESP()
 
 ESP.Overrides.GetColor = function(character)
@@ -79,6 +80,54 @@ CarSpeed = World.CreateOptionsButton({
     HoverText = "Hold LeftShift while driving to multiply the car's velocity.",
     Function = function(callback) end
 })
+
+local fates do
+    local oldwait = wait
+    getgenv().wait = function() end
+    local copy = function(tbl)
+        local copy = {}
+        for i, v in pairs(tbl) do
+            copy[i] = v
+        end
+        return copy
+    end
+    local env = copy(getfenv())
+    setmetatable(env, {
+        __index = function(self, i)
+            if rawget(env, i) then
+                return rawget(env, i)
+            elseif getfenv()[i] then
+                return getfenv()[i]
+            end
+        end
+    })
+    env.game = nil
+    local src = game:HttpGet("https://raw.githubusercontent.com/fatesc/fates-admin/main/main.lua"):gsub("local ExecuteCommand =", "ExecuteCommand =")
+    src = src:gsub("_L.CLI = false", "ConnectionStuff = Connections\n_L.CLI = false")
+    src = src:gsub("Utils.MatchSearch =", "Utils.Notify = function() return {Message = {Text = \"\"}} end\nUtils.MatchSearch =")
+    setfenv(loadstring(src), env)()
+    for _, v in pairs(env.ConnectionStuff.UI) do
+        if typeof(v) == "RBXScriptConnection" then
+            v:Disconnect()
+        end
+    end
+    fates = function(c) env.ExecuteCommand(c, {}, LocalPlayer) end
+    getgenv().wait = oldwait
+end
+
+local Noclip = {Enabled = false}
+Noclip = Blatant.CreateOptionsButton({
+    Name = "Noclip",
+    Function = function(callback)
+        fates(callback and "noclip" or "unnoclip")
+    end
+})
+
+LocalPlayer.CharacterAdded:Connect(function()
+    if Noclip.Enabled then
+        fates("noclip")
+    end
+end)
 
 local Camera = workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
