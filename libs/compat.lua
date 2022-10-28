@@ -127,7 +127,7 @@ end
 globals.cloneref = cloneref
 globals.sandbox = function(url, custom)
 	if type(url) ~= "string" and url == true then
-		local genv = getgenv()
+		local genv = (getgenv and getgenv()) or _G
 		for i, v in pairs(globals) do
 			genv[i] = v
 		end
