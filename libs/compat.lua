@@ -136,7 +136,7 @@ globals.sandbox = function(url, custom)
 	if custom and type(custom) == "string" then
 		globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
 		globals.ImportESP = function()
-			local ESP = globals.sandbox("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua")
+			local ESP = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua")
 			ESP:Toggle(false)
 			ESP.Players = false
 			ESP.Tracers = false
