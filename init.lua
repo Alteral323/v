@@ -1,4 +1,4 @@
-ocal IDs = {
+local IDs = {
     [3647333358] = "evade",
     [3104101863] = "michaelszombies",
     [2534724415] = "liberty"
