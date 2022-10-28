@@ -145,8 +145,8 @@ globals.sandbox = function(url, custom)
 			ESP.Color = ESP.Presets.Green
 			return ESP
 		end
-		globals.maid = globals.sandbox("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
-		globals.signal = globals.sandbox("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
+		globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
+		globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
 	end
 	local module = assert(loadstring(game:HttpGet(url)))
 	setfenv(module, setmetatable(globals, {__index = getfenv(1)}))
