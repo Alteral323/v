@@ -8,6 +8,7 @@ local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 
+ESP.Health = true
 ESP.Overrides.GetColor = function(character)
     local player = ESP:GetPlrFromChar(character)
     return player and player.TeamColor.Color or ESP.Color
@@ -94,10 +95,10 @@ local isIgnored = function(player)
 end
 local Enemy = false
 local Teams = {Police = true, Sheriff = true, Civilian = true}
-local mindist = math.huge
 local ClosetEnemy = function()
     if SilentAim.Enabled then
         local MousePos = Vector2.new(Mouse.X, Mouse.Y)
+        local mindist = math.huge
         local valid = {}
         for _, v in pairs(Players:GetPlayers()) do
             if v ~= LocalPlayer and LocalPlayer.Character and not isIgnored(v) and Teams[v.Team.name] and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChildOfClass("Humanoid") and v.Character:FindFirstChildOfClass("Humanoid").Health > 0 then
