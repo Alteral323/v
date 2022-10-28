@@ -82,10 +82,10 @@ function ESP:GetHealth(char)
 		return ov(char)
 	end
 	local player = self:GetPlrFromChar(char)
-    if player and player:FindFirstChildOfClass("Humanoid") then
-        return player:FindFirstChildOfClass("Humanoid").Health, player:FindFirstChildOfClass("Humanoid").MaxHealth
+    if player and player:FindFirstChildWhichIsA("Humanoid") then
+        return {player:FindFirstChildWhichIsA("Humanoid").Health, player:FindFirstChildWhichIsA("Humanoid").MaxHealth}
     end
-	return 100, 100
+	return {100, 100}
 end
 
 function ESP:Toggle(bool)
@@ -237,9 +237,9 @@ function boxBase:Update()
         if Vis5 then
             self.Components.Name.Visible = true
             self.Components.Name.Position = Vector2.new(TagPos.X, TagPos.Y)
-            if ESP.Health and self.Player then
-                local health, maxhealth = ESP:GetHealth(self.Player)
-                self.Components.Name.Text = self.Name .. (" [%s/%s]"):format(health, maxhealth)
+            if ESP.Health and self.Player and self.Player.Character then
+                local health = ESP:GetHealth(self.Player.Character)
+                self.Components.Name.Text = self.Name .. (" [%s/%s]"):format(health[1], health[2])
             else
                 self.Components.Name.Text = self.Name
             end
