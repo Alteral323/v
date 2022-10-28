@@ -1,5 +1,4 @@
--- im a skid, that's all u need to know ig
-local IDs = {
+ocal IDs = {
     [3647333358] = "evade",
     [3104101863] = "michaelszombies",
     [2534724415] = "liberty"
