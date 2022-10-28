@@ -23,8 +23,10 @@ local ESP = {
     Overrides = {}
 }
 
+local cloneref = cloneref or function(o) return o end
 local cam = workspace.CurrentCamera
-local plrs = Services.Players
+local plrs = cloneref(game:GetService("Players"))
+local runserv = cloneref(game:GetService("RunService"))
 local plr = plrs.LocalPlayer
 local mouse = plr:GetMouse()
 
@@ -389,7 +391,7 @@ for i,v in pairs(plrs:GetPlayers()) do
     end
 end
 
-Services.RunService.RenderStepped:Connect(function()
+runserv.RenderStepped:Connect(function()
     cam = workspace.CurrentCamera
     for i,v in (ESP.Enabled and pairs or ipairs)(ESP.Objects) do
         if v.Update then
