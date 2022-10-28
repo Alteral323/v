@@ -8,7 +8,6 @@ local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
 local ESP = ImportESP()
 
-ESP.Health = true
 ESP.Overrides.GetColor = function(character)
     local player = ESP:GetPlrFromChar(character)
     return player and player.TeamColor.Color or ESP.Color
@@ -42,6 +41,13 @@ NewESP.CreateToggle({
     Default = true
 })
 NewESP.CreateToggle({
+    Name = "Health",
+    Function = function(callback)
+        ESP.Health = callback
+    end,
+    Default = true
+})
+NewESP.CreateToggle({
     Name = "Tracers",
     Function = function(callback)
         ESP.Tracers = callback
@@ -68,18 +74,10 @@ SilentAim.CreateToggle({
 })
 
 local CarSpeed = {Enabled = false}
-local CarSpeedVal = {Value = 1}
 CarSpeed = World.CreateOptionsButton({
     Name = "CarSpeed",
     HoverText = "Hold LeftShift while driving to multiply the car's velocity.",
     Function = function(callback) end
-})
-CarSpeedVal = CarSpeed.CreateSlider({
-    Name = "Multiplier",
-    Min = 1,
-    Max = 15,
-    Default = 1,
-    Function = function() end
 })
 
 local Camera = workspace.CurrentCamera
@@ -142,7 +140,7 @@ RunService.Heartbeat:Connect(function(delta)
         if typeof(Humanoid) == "Instance" and typeof(Humanoid.RootPart) == "Instance" and typeof(Humanoid.SeatPart) == "Instance" then
             local rootpart = Humanoid.RootPart
             local seatpart = Humanoid.SeatPart
-            local diff = (1 + 3 * delta) * CarSpeedVal.Value
+            local diff = 1 + 3 * delta
             if k0down and not k1down then
                 seatpart.AssemblyLinearVelocity *= Vector3.new(diff, 1, diff)
             elseif k1down and not k0down then
