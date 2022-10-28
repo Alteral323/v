@@ -30,6 +30,7 @@ local mouse = plr:GetMouse()
 
 local V3new = Vector3.new
 local WorldToViewportPoint = cam.WorldToViewportPoint
+local format, floor = string.format, math.floor
 
 local function Draw(obj, props)
 	local new = Drawing.new(obj)
@@ -82,10 +83,11 @@ function ESP:GetHealth(char)
 		return ov(char)
 	end
 	local player = self:GetPlrFromChar(char)
-    if player and player:FindFirstChildWhichIsA("Humanoid") then
-        return {player:FindFirstChildWhichIsA("Humanoid").Health, player:FindFirstChildWhichIsA("Humanoid").MaxHealth}
-    end
-	return {100, 100}
+	local humanoid = player and player:FindFirstChildWhichIsA("Humanoid")
+	if player and humanoid then
+		return {Health = humanoid.Health, MaxHealth = humanoid.MaxHealth}
+	end
+	return {Health = 0, MaxHealth = 0}
 end
 
 function ESP:Toggle(bool)
@@ -238,8 +240,8 @@ function boxBase:Update()
             self.Components.Name.Visible = true
             self.Components.Name.Position = Vector2.new(TagPos.X, TagPos.Y)
             if ESP.Health and self.Player and self.Player.Character then
-                local health = ESP:GetHealth(self.Player.Character)
-                self.Components.Name.Text = self.Name .. (" [%s/%s]"):format(health[1], health[2])
+                local Humanoid = ESP:GetHealth(self.Player.Character)
+                self.Components.Name.Text = self.Name .. format(" [%s/%s]", floor(Humanoid.Health), floor(Humanoid.MaxHealth))
             else
                 self.Components.Name.Text = self.Name
             end
