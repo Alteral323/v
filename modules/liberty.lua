@@ -14,6 +14,15 @@ ESP.Overrides.GetColor = function(character)
     return player and player.TeamColor.Color or ESP.Color
 end
 
+ESP.Overrides.GetHealth = function(character)
+    local player = ESP:GetPlrFromChar(character)
+    local humanoid = player and character:FindFirstChild("Humanoid")
+    if player and character and humanoid then
+        return {Health = humanoid.Health, MaxHealth = humanoid.MaxHealth}
+    end
+    return {Health = 0, MaxHealth = 0}
+end
+
 local NewESP = Render.CreateOptionsButton({
     Name = "ESP",
     Function = function(callback)
