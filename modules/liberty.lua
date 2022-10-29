@@ -105,6 +105,7 @@ local fates do
     local src = game:HttpGet("https://raw.githubusercontent.com/fatesc/fates-admin/main/main.lua"):gsub("local ExecuteCommand =", "ExecuteCommand =")
     src = src:gsub("_L.CLI = false", "ConnectionStuff = Connections\n_L.CLI = false")
     src = src:gsub("Utils.MatchSearch =", "Utils.Notify = function() return {Message = {Text = \"\"}} end\nUtils.MatchSearch =")
+    src = src:gsub("AddConnection(CConnect(Services.UserInputService.InputBegan, ", "local bruhhh = function(f) return f end\nbruhhh(bruhhh(")
     setfenv(loadstring(src), env)()
     for _, v in pairs(env.ConnectionStuff.UI) do
         if typeof(v) == "RBXScriptConnection" then
