@@ -93,6 +93,7 @@ CarSpeed = World.CreateOptionsButton({
 local fates do
     local oldwait = wait
     getgenv().wait = function() end
+    getgenv().F_A = nil
     local copy = function(tbl)
         local copy = {}
         for i, v in pairs(tbl) do
