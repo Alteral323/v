@@ -122,7 +122,7 @@ local fates do
             v:Disconnect()
         end
     end
-    fates = function(c) env.ExecuteCommand(c, {}, LocalPlayer) end
+    fates = function(c) spawn(function() env.ExecuteCommand(c, {}, LocalPlayer) end) end
     getgenv().F_A = nil
     getgenv().wait = oldwait
 end
