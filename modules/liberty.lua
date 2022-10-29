@@ -123,6 +123,7 @@ local fates do
         end
     end
     fates = function(c) env.ExecuteCommand(c, {}, LocalPlayer) end
+    getgenv().F_A = nil
     getgenv().wait = oldwait
 end
 
