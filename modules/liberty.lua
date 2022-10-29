@@ -126,6 +126,11 @@ local fates do
     getgenv().F_A = nil
     getgenv().wait = oldwait
 end
+local OldSelfDestruct = GuiLibrary.SelfDestruct
+GuiLibrary.SelfDestruct = function()
+    OldSelfDestruct()
+    fates.ExecuteCommand("killscript")
+end
 
 local Noclip = {Enabled = false}
 Noclip = Blatant.CreateOptionsButton({
