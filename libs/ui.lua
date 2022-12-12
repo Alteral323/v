@@ -1,4 +1,5 @@
 return function(save, folder)
+    save = save or tostring(game.PlaceId)
     folder = folder or "new"
     if not isfolder("vape") then
         makefolder("vape")
