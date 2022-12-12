@@ -23,7 +23,7 @@ local ESP = {
     Overrides = {}
 }
 
-local cloneref = cloneref or function(o) return o end
+local cloneref = cloneref or function(...) return ... end
 local cam = workspace.CurrentCamera
 local plrs = cloneref(game:GetService("Players"))
 local runserv = cloneref(game:GetService("RunService"))
