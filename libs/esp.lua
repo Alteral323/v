@@ -406,7 +406,7 @@ local Updating = runserv.RenderStepped:Connect(function()
     end
 end)
 
-ESP.Kill = function()
+function ESP:Kill()
     ESP.Debug = false
     ESP:Toggle(false)
     ESP.Players = false
@@ -417,7 +417,7 @@ ESP.Kill = function()
     Updating:Disconnect()
 end
 
-ESP.DefaultSetup = function(color)
+function ESP:DefaultSetup(color)
     ESP:Toggle(true)
     ESP.Players = true
     ESP.Tracers = true
