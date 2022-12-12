@@ -1,3 +1,5 @@
+assert(Drawing, "missing dependency: drawing")
+
 local ESP = {
     Enabled = false,
     Boxes = true,
@@ -32,10 +34,11 @@ local mouse = plr:GetMouse()
 
 local V3new = Vector3.new
 local WorldToViewportPoint = cam.WorldToViewportPoint
+local newDrawing = Drawing.new
 local format, floor = string.format, math.floor
 
 local function Draw(obj, props)
-	local new = Drawing.new(obj)
+	local new = newDrawing(obj)
 	props = props or {}
 	for i, v in pairs(props) do
 		new[i] = v
