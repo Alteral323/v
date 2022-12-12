@@ -18,7 +18,7 @@ return function(save)
             end
         end
         GuiLibrary.ObjectsThatCanBeSaved["Blur BackgroundToggle"].Api.ToggleButton(false, true)
-        GuiLibrary.UpdateUI(0.4622395932674408, 0.9624060392379761, 0.5215686559677124)
+        GuiLibrary.UpdateUI(0.4622395932674408, 0.9624060392379761, 0.5215686559677124, true)
     end)
     return GuiLibrary
 end
