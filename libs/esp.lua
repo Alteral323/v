@@ -21,7 +21,8 @@ local ESP = {
         Green = fromRGB(0, 255, 154),
         Red = fromRGB(255, 0, 128),
         Orange = fromRGB(255, 162, 0),
-        Blue = fromRGB(0, 145, 255)
+        Blue = fromRGB(0, 145, 255),
+        White = fromRGB(255, 255, 255)
     },
     IgnoreHumanoids = false,
     Objects = setmetatable({}, {__mode = "kv"}),
@@ -412,7 +413,18 @@ ESP.Kill = function()
     ESP.Tracers = false
     ESP.Boxes = false
     ESP.Names = false
+    ESP.Health = false
     Updating:Disconnect()
+end
+
+ESP.DefaultSetup = function(color)
+    ESP:Toggle(true)
+    ESP.Players = true
+    ESP.Tracers = true
+    ESP.Boxes = true
+    ESP.Names = true
+    ESP.Health = true
+    ESP.Color = ESP.Presets[tostring(color)] or color or ESP.Presets.White
 end
 
 return ESP
