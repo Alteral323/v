@@ -71,7 +71,7 @@ function ESP:GetColor(obj)
 		return ov(obj)
     end
     local p = self:GetPlrFromChar(obj)
-	return p and self.TeamColor and p.Team and p.Team.TeamColor.Color or self.Color
+    return p and self.TeamColor and p.Team and p.Team.TeamColor.Color or self.Color
 end
 
 function ESP:GetPlrFromChar(char)
@@ -89,8 +89,8 @@ function ESP:GetHealth(char)
 		return ov(char)
 	end
 	local player = self:GetPlrFromChar(char)
-	local humanoid = player and player:FindFirstChildWhichIsA("Humanoid")
-	if player and humanoid then
+	local humanoid = player and player.Character and (player.Character:FindFirstChildWhichIsA("Humanoid") or player.Character:FindFirstChild("Humanoid"))
+	if humanoid then
 		return {Health = humanoid.Health, MaxHealth = humanoid.MaxHealth}
 	end
 	return {Health = 0, MaxHealth = 0}
