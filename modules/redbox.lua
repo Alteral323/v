@@ -165,7 +165,7 @@ StaffWatch = Utility.CreateOptionsButton({
     end
 })
 Players.PlayerAdded:Connect(function(player)
-    if StaffCheck.Enabled then
+    if StaffWatch.Enabled then
         CheckStaff(player)
     end
 end)
