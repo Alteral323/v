@@ -5,6 +5,7 @@ local ReplicatedStorage = Services.ReplicatedStorage
 local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
 local World = GuiLibrary.ObjectsThatCanBeSaved.WorldWindow.Api
+local Utility = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api
 local ESP = ImportESP()
 ESP.Overrides.GetColor = function()
     return ESP.Presets.White
@@ -50,6 +51,15 @@ NewESP.CreateToggle({
         ESP.Tracers = callback
     end
 })
+
+local CreateWarning = function(title, text, del)
+    local suc, res = pcall(function()
+        local frame = GuiLibrary.CreateNotification(title, text, del, "assets/WarningNotification.png")
+        frame.Frame.Frame.ImageColor3 = Color3.fromRGB(236, 129, 44)
+        return frame
+    end)
+    return (suc and res)
+end
 
 local GetRoot = function(char)
     char = char or LocalPlayer.Character
@@ -129,3 +139,32 @@ local Invisibility = World.CreateOptionsButton({
         end
     end
 })
+
+local IsStaff = function(player)
+    if player and player:IsInGroup(10589628) and player:GetRankInGroup(10589628) >= 252 then
+        return {true, player:GetRoleInGroup(10589628)}
+    end
+    return {false, "Guest"}
+end
+local CheckStaff = function(player)
+    local data = IsStaff(player)
+    if data[1] then
+        CreateWarning("StaffCheck", "Staff Detected: " .. (player.DisplayName and player.DisplayName .. " (" .. player.Name .. ")" or player.Name) .. " has the rank " .. data[2], 60)
+    end
+end
+local StaffWatch = {Enabled = false}
+StaffWatch = Utility.CreateOptionsButton({
+    Name = "StaffCheck",
+    Function = function(callback)
+        if callback then
+            for _, v in next, Players:GetChildren() do
+                CheckStaff(v)
+            end
+        end
+    end
+})
+Players.PlayerAdded:Connect(function(player)
+    if StaffCheck.Enabled then
+        CheckStaff(player)
+    end
+end)
