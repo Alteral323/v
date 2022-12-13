@@ -74,6 +74,7 @@ Tools = Combat.CreateOptionsButton({
     Name = "Tools",
     Function = function(callback)
         if callback then
+            Tools.ToggleButton(false)
             AddTool:FireServer(LocalPlayer.Character, Loadout.Melee.Halberd)
             AddTool:FireServer(LocalPlayer.Character, Loadout.Secondary:FindFirstChild("Beretta M9"))
             AddTool:FireServer(LocalPlayer.Character, Loadout.Primary["Pump Shotgun"])
@@ -81,7 +82,6 @@ Tools = Combat.CreateOptionsButton({
             AddTool:FireServer(LocalPlayer.Character, Loadout.Misc:FindFirstChild("Frag Grenade"))
             AddTool:FireServer(LocalPlayer.Character, Loadout.Misc:FindFirstChild("Incendiary Grenade"))
             AddTool:FireServer(LocalPlayer.Character, Loadout.Misc:FindFirstChild("Cuffs"))
-            Tools.ToggleButton(false)
         end
     end
 })
