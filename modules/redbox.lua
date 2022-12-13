@@ -109,6 +109,7 @@ local Invisibility = World.CreateOptionsButton({
                     end
                 end
             end
+            Seat.Transparency = 1
         else
             local Seat = InvisStorage.Seat
             local Weld = InvisStorage.Weld
