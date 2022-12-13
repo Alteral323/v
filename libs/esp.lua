@@ -52,7 +52,6 @@ function ESP:GetTeam(p)
 	if ov then
 		return ov(p)
 	end
-	
 	return p and p.Team
 end
 
@@ -61,7 +60,6 @@ function ESP:IsTeamMate(p)
 	if ov then
 		return ov(p)
     end
-    
     return self:GetTeam(p) == self:GetTeam(plr)
 end
 
@@ -79,7 +77,6 @@ function ESP:GetPlrFromChar(char)
 	if ov then
 		return ov(char)
 	end
-	
 	return plrs:GetPlayerFromCharacter(char)
 end
 
