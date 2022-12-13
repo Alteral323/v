@@ -1,6 +1,7 @@
 local Players = Services.Players
 local LocalPlayer = Players.LocalPlayer
 local ReplicatedStorage = Services.ReplicatedStorage
+local TeleportService = Services.TeleportService
 
 local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
@@ -168,3 +169,20 @@ Players.PlayerAdded:Connect(function(player)
         CheckStaff(player)
     end
 end)
+
+local Rejoin = {Enabled = false}
+Rejoin = Utility.CreateOptionsButton({
+    Name = "Rejoin",
+    Function = function(callback)
+        if callback then
+            Rejoin.ToggleButton(false)
+            if #Players:GetPlayers() <= 1 then
+                LocalPlayer:Kick("\nRejoining...")
+                wait()
+                TeleportService:Teleport(game.PlaceId, LocalPlayer)
+            else
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
+            end
+        end
+    end
+})
