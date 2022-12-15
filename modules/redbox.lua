@@ -310,9 +310,9 @@ KillAll = Blatant.CreateOptionsButton({
                                 [5] = CFrame.new(Vector3.new(-0.159149169921875, -0.2970867156982422, 1.0000152587890625), Vector3.new(0.00001424551010131836, 7.227063179016113e-07, 1.0000001192092896)),
                                 [6] = melee
                             }
-                            HitMelee:FireServer(unpack(args))
-                            HitMelee:FireServer(unpack(args))
-                            HitMelee:FireServer(unpack(args))
+                            for _ = 1, 4 do
+                                HitMelee:FireServer(unpack(args))
+                            end
                         end
                     end
                 end
