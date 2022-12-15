@@ -270,3 +270,54 @@ JumpVal = JumpPower.CreateSlider({
     Default = 75,
     Function = function() end
 })
+
+local equipMelee = function()
+    if LocalPlayer and LocalPlayer:FindFirstChildWhichIsA("Backpack") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid") then
+        local Backpack = LocalPlayer:FindFirstChildWhichIsA("Backpack")
+        local Humanoid = LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+        Humanoid:UnequipTools()
+        for _, v in pairs(Backpack:GetDescendants()) do
+            if v.Name == "toolSettings" and v:IsA("ModuleScript") and require(v).toolType == "melee" then
+                local melee = v.Parent
+                Humanoid:EquipTool(melee)
+                return melee
+            end
+        end
+    end
+    return false
+end
+
+local HitMelee = ReplicatedStorage.Assets.Remotes.hitMelee
+local KillAll = {Enabled = false}
+KillAll = Blatant.CreateOptionsButton({
+    Name = "KillAll",
+    Function = function(callback)
+        if callback then
+            KillAll.ToggleButton(false)
+            local melee = equipMelee()
+            wait(0.81)
+            if melee then
+                for _, v in pairs(Players:GetChildren()) do
+                    if v ~= LocalPlayer and v.Character then
+                        local Humanoid = v.Character:FindFirstChildWhichIsA("Humanoid")
+                        local Head = v.Character:FindFirstChild("Head")
+                        if Humanoid and Humanoid.Health > 0 and Head then
+                            local args = {
+                                [1] = Head,
+                                [2] = Vector3.new(182.07310485839844, 5.787327289581299, -430.5772705078125),
+                                [3] = Vector3.new(-0.783150851726532, 0.18024331331253052, -0.5951363444328308),
+                                [4] = Enum.Material.Plastic,
+                                [5] = CFrame.new(Vector3.new(-0.159149169921875, -0.2970867156982422, 1.0000152587890625), Vector3.new(0.00001424551010131836, 7.227063179016113e-07, 1.0000001192092896)),
+                                [6] = melee
+                            }
+                            HitMelee:FireServer(unpack(args))
+                            HitMelee:FireServer(unpack(args))
+                            HitMelee:FireServer(unpack(args))
+                        end
+                    end
+                end
+            end
+        end
+    end,
+    HoverText = "Requires a melee weapon."
+})
