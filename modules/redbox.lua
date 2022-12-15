@@ -2,6 +2,7 @@ local Players = Services.Players
 local LocalPlayer = Players.LocalPlayer
 local ReplicatedStorage = Services.ReplicatedStorage
 local TeleportService = Services.TeleportService
+local RunService = Services.RunService
 
 local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
@@ -186,4 +187,86 @@ Rejoin = Utility.CreateOptionsButton({
             end
         end
     end
+})
+
+local OldSpeed = nil
+local SpeedConnection = nil
+local SpeedVal = {Value = 65}
+local Speed = Blatant.CreateOptionsButton({
+    Name = "Speed",
+    Function = function(callback)
+        if callback then
+            pcall(function()
+                SpeedConnection:Disconnect()
+                SpeedConnection = nil
+            end)
+            SpeedConnection = RunService.Heartbeat:Connect(function()
+                local Humanoid = LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+                if Humanoid then
+                    if OldSpeed == nil then
+                        OldSpeed = Humanoid.WalkSpeed
+                    end
+                    Humanoid.WalkSpeed = SpeedVal.Value
+                end
+            end)
+        else
+            local Humanoid = LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+            if Humanoid and OldSpeed then
+                Humanoid.WalkSpeed = OldSpeed
+            end
+            OldSpeed = nil
+            pcall(function()
+                SpeedConnection:Disconnect()
+                SpeedConnection = nil
+            end)
+        end
+    end
+})
+SpeedVal = Speed.CreateSlider({
+    Name = "Speed",
+    Min = 1,
+    Max = 250,
+    Default = 65,
+    Function = function() end
+})
+
+local OldJumpPower = nil
+local JumpConnection = nil
+local JumpVal = {Value = 75}
+local JumpPower = Blatant.CreateOptionsButton({
+    Name = "JumpPower",
+    Function = function(callback)
+        if callback then
+            pcall(function()
+                JumpConnection:Disconnect()
+                JumpConnection = nil
+            end)
+            JumpConnection = RunService.Heartbeat:Connect(function()
+                local Humanoid = LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+                if Humanoid then
+                    if OldJumpPower == nil then
+                        OldJumpPower = Humanoid.JumpPower
+                    end
+                    Humanoid.JumpPower = JumpVal.Value
+                end
+            end)
+        else
+            local Humanoid = LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+            if Humanoid and OldJumpPower then
+                Humanoid.JumpPower = OldJumpPower
+            end
+            OldJumpPower = nil
+            pcall(function()
+                JumpConnection:Disconnect()
+                JumpConnection = nil
+            end)
+        end
+    end
+})
+JumpVal = JumpPower.CreateSlider({
+    Name = "Power",
+    Min = 1,
+    Max = 250,
+    Default = 75,
+    Function = function() end
 })
