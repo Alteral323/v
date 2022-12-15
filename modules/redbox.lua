@@ -295,8 +295,8 @@ KillAll = Blatant.CreateOptionsButton({
         if callback then
             KillAll.ToggleButton(false)
             local melee = equipMelee()
-            wait(0.81)
             if melee then
+                wait(require(melee.toolSettings).equipTime + 0.01)
                 for _, v in pairs(Players:GetChildren()) do
                     if v ~= LocalPlayer and v.Character then
                         local Humanoid = v.Character:FindFirstChildWhichIsA("Humanoid")
