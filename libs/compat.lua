@@ -148,8 +148,8 @@ globals.sandbox = function(url, custom)
 		globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
 		globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
 	end
-	local module = (shared.VapeDeveloper and assert(loadstring(readfile("vape/CustomModules/" .. custom .. ".lua")))) or assert(loadstring(game:HttpGet(url)))
-	shared.VapeDeveloper = nil
+	local module = (shared.VapeDeveloperMode and assert(loadstring(readfile("vape/CustomModules/" .. custom .. ".lua")))) or assert(loadstring(game:HttpGet(url)))
+	shared.VapeDeveloperMode = nil
 	setfenv(module, setmetatable(globals, {__index = getfenv(1)}))
 	return module() or {}
 end
