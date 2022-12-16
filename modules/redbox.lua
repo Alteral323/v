@@ -3,6 +3,7 @@ local LocalPlayer = Players.LocalPlayer
 local ReplicatedStorage = Services.ReplicatedStorage
 local TeleportService = Services.TeleportService
 local RunService = Services.RunService
+local Mouse = LocalPlayer:GetMouse()
 
 local Combat = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api
 local Render = GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api
@@ -292,6 +293,34 @@ local equipMelee = function()
     return {false}
 end
 
+local WorldToScreen = function(Object)
+	local ObjectVector = workspace.CurrentCamera:WorldToScreenPoint(Object.Position)
+	return Vector2.new(ObjectVector.X, ObjectVector.Y)
+end
+
+local MousePositionToVector2 = function()
+	return Vector2.new(Mouse.X, Mouse.Y)
+end
+
+local GetClosestPlayerFromCursor = function()
+    local found = nil
+    local ClosestDistance = math.huge
+    for _, v in pairs(Players:GetPlayers()) do
+        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChildOfClass("Humanoid") then
+            for _, x in pairs(v.Character:GetChildren()) do
+                if string.find(x.Name, "Torso") then
+                    local Distance = (WorldToScreen(x) - MousePositionToVector2()).Magnitude
+                    if Distance < ClosestDistance then
+                        ClosestDistance = Distance
+                        found = v
+                    end
+                end
+            end
+        end
+    end
+    return found
+end
+
 local HitMelee = ReplicatedStorage.Assets.Remotes.hitMelee
 local KillMethod = {Value = "All"}
 local EntityKill = {Enabled = false}
@@ -359,6 +388,28 @@ EntityKill = Blatant.CreateOptionsButton({
                         end
                     end
                 end
+                if KillMethod.Value == "Cursor" then
+                    if LocalPlayer and LocalPlayer.Character then
+                        local target = GetClosestPlayerFromCursor()
+                        if target ~= nil and target.Character then
+                            local Humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
+                            local Head = target.Character:FindFirstChild("Head")
+                            if Humanoid and Humanoid.Health > 0 and Head then
+                                local args = {
+                                    [1] = Head,
+                                    [2] = Vector3.new(182.07310485839844, 5.787327289581299, -430.5772705078125),
+                                    [3] = Vector3.new(-0.783150851726532, 0.18024331331253052, -0.5951363444328308),
+                                    [4] = Enum.Material.Plastic,
+                                    [5] = CFrame.new(Vector3.new(-0.159149169921875, -0.2970867156982422, 1.0000152587890625), Vector3.new(0.00001424551010131836, 7.227063179016113e-07, 1.0000001192092896)),
+                                    [6] = melee[1]
+                                }
+                                for _ = 1, 4 do
+                                    HitMelee:FireServer(unpack(args))
+                                end
+                            end
+                        end
+                    end
+                end
             end
         end
     end,
@@ -366,6 +417,6 @@ EntityKill = Blatant.CreateOptionsButton({
 })
 KillMethod = EntityKill.CreateDropdown({
     Name = "Mode", 
-    List = {"All", "Nearest"},
+    List = {"All", "Nearest", "Cursor"},
     Function = function() end
 })
