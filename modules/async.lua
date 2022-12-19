@@ -77,6 +77,7 @@ AntiArrest = Utility.CreateOptionsButton({
 })
 ArrestClient.OnClientEvent:Connect(function()
     if AntiArrest.Enabled then
+        wait()
         StarterGui:SetCore("ResetButtonCallback", true)
     end
 end)
