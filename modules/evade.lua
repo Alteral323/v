@@ -209,7 +209,7 @@ old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
     local args = {...}
     local method = getnamecallmethod()
     if tostring(self) == "Communicator" and method == "InvokeServer" and args[1] == "update" then
-        return (Speed.Enabled and SpeedVal.Value) or 1450, (JumpPower.Enabled and JumpPowerVal.Value) or 3
+        return (Speed.Enabled and SpeedVal.Value) or 1500, (JumpPower.Enabled and JumpPowerVal.Value) or 3
     end
     return old(self, ...)
 end))
