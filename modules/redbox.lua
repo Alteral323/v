@@ -56,6 +56,11 @@ NewESP.CreateToggle({
     end
 })
 
+local AddTool = ReplicatedStorage.AddTool
+local Loadout = ReplicatedStorage.Assets.Loadout
+local HitMelee = ReplicatedStorage.Assets.Remotes.hitMelee
+local InvisStorage = {}
+
 local CreateWarning = function(title, text, del)
     local suc, res = pcall(function()
         local frame = GuiLibrary.CreateNotification(title, text, del, "assets/WarningNotification.png")
@@ -70,8 +75,6 @@ local GetRoot = function(char)
     return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
 end
 
-local AddTool = ReplicatedStorage.AddTool
-local Loadout = ReplicatedStorage.Assets.Loadout
 local Tools = {Enabled = false}
 Tools = Combat.CreateOptionsButton({
     Name = "Tools",
@@ -89,7 +92,6 @@ Tools = Combat.CreateOptionsButton({
     end
 })
 
-local InvisStorage = {}
 local Invisibility = World.CreateOptionsButton({
     Name = "Invisibility",
     Function = function(callback)
@@ -321,7 +323,6 @@ local GetClosestPlayerFromCursor = function()
     return found
 end
 
-local HitMelee = ReplicatedStorage.Assets.Remotes.hitMelee
 local KillMethod = {Value = "All"}
 local EntityKill = {Enabled = false}
 EntityKill = Blatant.CreateOptionsButton({
