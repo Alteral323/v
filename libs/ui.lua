@@ -12,7 +12,7 @@ return function(save, folder)
     end
     shared.VapeIndependent = true
     shared.CustomSaveVape = folder .. "/" .. save
-    local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua"))()
+    local GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/gui/NewMainScript.lua"))()
     task.spawn(function()
         for _, v in pairs(GuiLibrary.ObjectsThatCanBeSaved.GUIWindow.Object:GetChildren()) do
             if v.Name == "SettingsWheel" and v.Position ~= UDim2.new(1, -25, 0, 14) then
