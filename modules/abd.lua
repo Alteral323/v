@@ -75,7 +75,7 @@ local GetClosestPlayerFromCursor = function()
     for _, v in pairs(Players:GetPlayers()) do
         if v ~= LocalPlayer and v.Character and v.Character:FindFirstChildOfClass("Humanoid") then
             for _, x in pairs(v.Character:GetChildren()) do
-                if string.find(x.Name, "Torso") then
+                if string.find(x.Name, "Head") then
                     local Distance = (WorldToScreen(x) - MousePositionToVector2()).Magnitude
                     if Distance < ClosestDistance then
                         ClosestDistance = Distance
