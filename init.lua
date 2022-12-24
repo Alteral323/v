@@ -3,8 +3,7 @@ local IDs = {
     [3104101863] = "michaelszombies",
     [2534724415] = "liberty",
     [10243982775] = "redbox",
-    [9256427353] = "async",
-    [2686500207] = "abd"
+    [9256427353] = "async"
 }
 local modules = "https://raw.githubusercontent.com/Alteral323/v/main/modules/"
 local compat = "https://raw.githubusercontent.com/Alteral323/v/main/libs/compat.lua"
