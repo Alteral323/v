@@ -1,14 +1,14 @@
 return function(save, folder)
     save = save or tostring(game.PlaceId)
     folder = folder or "new"
-    if not isfolder("vape") then
-        makefolder("vape")
+    if not isfolder("vape-v4") then
+        makefolder("vape-v4")
     end
-    if not isfolder("vape/Profiles") then
-        makefolder("vape/Profiles")
+    if not isfolder("vape-v4/Profiles") then
+        makefolder("vape-v4/Profiles")
     end
-    if not isfolder("vape/Profiles/" .. folder) then
-        makefolder("vape/Profiles/" .. folder)
+    if not isfolder("vape-v4/Profiles/" .. folder) then
+        makefolder("vape-v4/Profiles/" .. folder)
     end
     shared.VapeIndependent = true
     shared.CustomSaveVape = folder .. "/" .. save
