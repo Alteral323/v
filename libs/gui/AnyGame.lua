@@ -17,7 +17,7 @@ workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
 end)
 local targetinfo = shared.VapeTargetInfo
 local uis = game:GetService("UserInputService")
-local v3check = syn and syn.toast_notification and "V3" or ""
+local v3check = (syn and syn.toast_notification) and "V3" or ""
 local networkownertick = tick()
 local networkownerfunc = isnetworkowner or function(part)
 	if gethiddenproperty(part, "NetworkOwnershipRule") == Enum.NetworkOwnership.Manual then 
@@ -32,11 +32,11 @@ local betterisfile = function(file)
 end
 local function GetURL(scripturl)
 	if shared.VapeDeveloper then
-		assert(betterisfile("vape/"..scripturl), "File not found : vape/"..scripturl)
-		return readfile("vape/"..scripturl)
+		assert(betterisfile("vape-v4/"..scripturl), "File not found : vape-v4/"..scripturl)
+		return readfile("vape-v4/"..scripturl)
 	else
 		local res = game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/gui/"..scripturl, true)
-		assert(res ~= "404: Not Found", "File not found : vape/"..scripturl)
+		assert(res ~= "404: Not Found", "File not found : vape-v4/"..scripturl)
 		return res
 	end
 end
@@ -233,7 +233,7 @@ local function getcustomassetfunc(path)
 			textlabel:Remove()
 		end)
 		local req = requestfunc({
-			Url = "https://raw.githubusercontent.com/Alteral323/v/main/libs/gui/"..path:gsub("vape/assets", "assets"),
+			Url = "https://raw.githubusercontent.com/Alteral323/v/main/libs/gui/"..path:gsub("vape-v4/assets", "assets"),
 			Method = "GET"
 		})
 		writefile(path, req.Body)
@@ -385,7 +385,7 @@ local radarcam = Instance.new("Camera")
 radarcam.FieldOfView = 45
 local Radar = GuiLibrary.CreateCustomWindow({
 	["Name"] = "Radar", 
-	["Icon"] = "vape/assets/RadarIcon1.png",
+	["Icon"] = "vape-v4/assets/RadarIcon1.png",
 	["IconSize"] = 16
 })
 local RadarColor = Radar.CreateColorSlider({
@@ -442,7 +442,7 @@ players.PlayerRemoving:Connect(function(plr)
 end)
 GuiLibrary["ObjectsThatCanBeSaved"]["GUIWindow"]["Api"].CreateCustomToggle({
 	["Name"] = "Radar", 
-	["Icon"] = "vape/assets/RadarIcon2.png", 
+	["Icon"] = "vape-v4/assets/RadarIcon2.png", 
 	["Function"] = function(callback)
 		Radar.SetVisible(callback) 
 		if callback then
@@ -2605,7 +2605,7 @@ local Arrows = GuiLibrary["ObjectsThatCanBeSaved"]["RenderWindow"]["Api"].Create
 						thing.AnchorPoint = Vector2.new(0.5, 0.5)
 						thing.Position = UDim2.new(0.5, 0, 0.5, 0)
 						thing.Visible = false
-						thing.Image = getcustomassetfunc("vape/assets/ArrowIndicator.png")
+						thing.Image = getcustomassetfunc("vape-v4/assets/ArrowIndicator.png")
 						thing.Name = plr.Name
 						thing.Parent = ArrowsFolder
 					end
@@ -4438,14 +4438,14 @@ runcode(function()
 				vapecapeconnection = lplr.CharacterAdded:Connect(function(char)
 					task.spawn(function()
 						pcall(function() 
-							Cape(char, getcustomassetfunc("vape/assets/VapeCape.png"))
+							Cape(char, getcustomassetfunc("vape-v4/assets/VapeCape.png"))
 						end)
 					end)
 				end)
 				if lplr.Character then
 					task.spawn(function()
 						pcall(function() 
-							Cape(lplr.Character, getcustomassetfunc("vape/assets/VapeCape.png"))
+							Cape(lplr.Character, getcustomassetfunc("vape-v4/assets/VapeCape.png"))
 						end)
 					end)
 				end
