@@ -1,4 +1,4 @@
-local cloneref = cloneref or function(o) return o end
+local cloneref = cloneref or function(...) return ... end
 local Services = {
 	Players = cloneref(game:GetService("Players")),
 	Workspace = cloneref(game:GetService("Workspace")),
@@ -29,11 +29,11 @@ local firetouched = {}
 local networkownertick = tick()
 local oldpairs = pairs
 local table_find = function(t, v)
-    for _, val in next, t do 
-        if val == v then 
-            return val   
-        end    
-    end    
+	for _, val in next, t do 
+		if val == v then 
+			return val   
+		end    
+	end    
 end
 local globals = {}
 
