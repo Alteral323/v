@@ -1,17 +1,17 @@
 repeat task.wait() until game:IsLoaded()
 local injected = true
 local oldrainbow = false
-local customdir = (shared.VapePrivate and "vapeprivate/" or "vape/")
+local customdir = (shared.VapePrivate and "vape-v4-private/" or "vape-v4/")
 local betterisfile = function(file)
 	local suc, res = pcall(function() return readfile(file) end)
 	return suc and res ~= nil
 end
 local function GetURL(scripturl)
 	if shared.VapeDeveloper then
-		if not betterisfile("vape/"..scripturl) then
-			error("File not found : vape/"..scripturl)
+		if not betterisfile("vape-v4/"..scripturl) then
+			error("File not found : vape-v4/"..scripturl)
 		end
-		return readfile("vape/"..scripturl)
+		return readfile("vape-v4/"..scripturl)
 	else
 		local res = game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/gui/"..scripturl, true)
 		assert(res ~= "404: Not Found", "File not found")
@@ -66,8 +66,8 @@ end
 if isfolder("vape") == false then
 	makefolder("vape")
 end
-if not betterisfile("vape/assetsversion.dat") then
-	writefile("vape/assetsversion.dat", "1")
+if not betterisfile("vape-v4/assetsversion.dat") then
+	writefile("vape-v4/assetsversion.dat", "1")
 end
 if isfolder(customdir.."CustomModules") == false then
 	makefolder(customdir.."CustomModules")
@@ -75,22 +75,22 @@ end
 if isfolder(customdir.."Profiles") == false then
 	makefolder(customdir.."Profiles")
 end
-if not betterisfile("vape/language.dat") then
-	writefile("vape/language.dat", "en-us")
+if not betterisfile("vape-v4/language.dat") then
+	writefile("vape-v4/language.dat", "en-us")
 end
 local assetver = checkassetversion()
-if assetver and assetver > readfile("vape/assetsversion.dat") then
+if assetver and assetver > readfile("vape-v4/assetsversion.dat") then
 	if shared.VapeDeveloper == nil then
-		if isfolder("vape/assets") then
+		if isfolder("vape-v4/assets") then
 			if delfolder then
-				delfolder("vape/assets")
+				delfolder("vape-v4/assets")
 			end
 		end
-		writefile("vape/assetsversion.dat", assetver)
+		writefile("vape-v4/assetsversion.dat", assetver)
 	end
 end
-if isfolder("vape/assets") == false then
-	makefolder("vape/assets")
+if isfolder("vape-v4/assets") == false then
+	makefolder("vape-v4/assets")
 end
 
 local GuiLibrary = loadstring(GetURL("NewGuiLibrary.lua"))()
@@ -146,7 +146,7 @@ local function getcustomassetfunc(path)
 			textlabel:Remove()
 		end)
 		local req = requestfunc({
-			Url = "https://raw.githubusercontent.com/Alteral323/v/main/libs/gui/"..path:gsub("vape/assets", "assets"),
+			Url = "https://raw.githubusercontent.com/Alteral323/v/main/libs/gui/"..path:gsub("vape-v4/assets", "assets"),
 			Method = "GET"
 		})
 		writefile(path, req.Body)
@@ -170,68 +170,68 @@ end)
 local GUI = GuiLibrary.CreateMainWindow()
 local Combat = GuiLibrary.CreateWindow({
 	["Name"] = "Combat", 
-	["Icon"] = "vape/assets/CombatIcon.png", 
+	["Icon"] = "vape-v4/assets/CombatIcon.png", 
 	["IconSize"] = 15
 })
 local Blatant = GuiLibrary.CreateWindow({
 	["Name"] = "Blatant", 
-	["Icon"] = "vape/assets/BlatantIcon.png", 
+	["Icon"] = "vape-v4/assets/BlatantIcon.png", 
 	["IconSize"] = 16
 })
 local Render = GuiLibrary.CreateWindow({
 	["Name"] = "Render", 
-	["Icon"] = "vape/assets/RenderIcon.png", 
+	["Icon"] = "vape-v4/assets/RenderIcon.png", 
 	["IconSize"] = 17
 })
 local Utility = GuiLibrary.CreateWindow({
 	["Name"] = "Utility", 
-	["Icon"] = "vape/assets/UtilityIcon.png", 
+	["Icon"] = "vape-v4/assets/UtilityIcon.png", 
 	["IconSize"] = 17
 })
 local World = GuiLibrary.CreateWindow({
 	["Name"] = "World", 
-	["Icon"] = "vape/assets/WorldIcon.png", 
+	["Icon"] = "vape-v4/assets/WorldIcon.png", 
 	["IconSize"] = 16
 })
 local Friends = GuiLibrary.CreateWindow2({
 	["Name"] = "Friends", 
-	["Icon"] = "vape/assets/FriendsIcon.png", 
+	["Icon"] = "vape-v4/assets/FriendsIcon.png", 
 	["IconSize"] = 17
 })
 local Profiles = GuiLibrary.CreateWindow2({
 	["Name"] = "Profiles", 
-	["Icon"] = "vape/assets/ProfilesIcon.png", 
+	["Icon"] = "vape-v4/assets/ProfilesIcon.png", 
 	["IconSize"] = 19
 })
 GUI.CreateDivider()
 GUI.CreateButton({
 	["Name"] = "Combat", 
 	["Function"] = function(callback) Combat.SetVisible(callback) end, 
-	["Icon"] = "vape/assets/CombatIcon.png", 
+	["Icon"] = "vape-v4/assets/CombatIcon.png", 
 	["IconSize"] = 15
 })
 GUI.CreateButton({
 	["Name"] = "Blatant", 
 	["Function"] = function(callback) Blatant.SetVisible(callback) end, 
-	["Icon"] = "vape/assets/BlatantIcon.png", 
+	["Icon"] = "vape-v4/assets/BlatantIcon.png", 
 	["IconSize"] = 16
 })
 GUI.CreateButton({
 	["Name"] = "Render", 
 	["Function"] = function(callback) Render.SetVisible(callback) end, 
-	["Icon"] = "vape/assets/RenderIcon.png", 
+	["Icon"] = "vape-v4/assets/RenderIcon.png", 
 	["IconSize"] = 17
 })
 GUI.CreateButton({
 	["Name"] = "Utility", 
 	["Function"] = function(callback) Utility.SetVisible(callback) end, 
-	["Icon"] = "vape/assets/UtilityIcon.png", 
+	["Icon"] = "vape-v4/assets/UtilityIcon.png", 
 	["IconSize"] = 17
 })
 GUI.CreateButton({
 	["Name"] = "World", 
 	["Function"] = function(callback) World.SetVisible(callback) end, 
-	["Icon"] = "vape/assets/WorldIcon.png", 
+	["Icon"] = "vape-v4/assets/WorldIcon.png", 
 	["IconSize"] = 16
 })
 GUI.CreateDivider("MISC")
@@ -343,7 +343,7 @@ ProfilesTextList = Profiles.CreateTextList({
 		bindbkg.Visible = GuiLibrary["Profiles"][profilename]["Keybind"] ~= ""
 		bindbkg.Parent = obj
 		local bindimg = Instance.new("ImageLabel")
-		bindimg.Image = getcustomassetfunc("vape/assets/KeybindIcon.png")
+		bindimg.Image = getcustomassetfunc("vape-v4/assets/KeybindIcon.png")
 		bindimg.BackgroundTransparency = 1
 		bindimg.Size = UDim2.new(0, 12, 0, 12)
 		bindimg.Position = UDim2.new(0, 4, 0, 5)
@@ -407,14 +407,14 @@ ProfilesTextList = Profiles.CreateTextList({
 			end
 		end)
 		bindbkg.MouseEnter:Connect(function() 
-			bindimg.Image = getcustomassetfunc("vape/assets/PencilIcon.png") 
+			bindimg.Image = getcustomassetfunc("vape-v4/assets/PencilIcon.png") 
 			bindimg.Visible = true
 			bindtext.Visible = false
 			bindbkg.Size = UDim2.new(0, 20, 0, 21)
 			bindbkg.Position = UDim2.new(1, -50, 0, 6)
 		end)
 		bindbkg.MouseLeave:Connect(function() 
-			bindimg.Image = getcustomassetfunc("vape/assets/KeybindIcon.png")
+			bindimg.Image = getcustomassetfunc("vape-v4/assets/KeybindIcon.png")
 			if GuiLibrary["Profiles"][profilename]["Keybind"] ~= "" then
 				bindimg.Visible = false
 				bindtext.Visible = true
@@ -468,7 +468,7 @@ local OnlineProfilesButtonImage = Instance.new("ImageLabel")
 OnlineProfilesButtonImage.BackgroundTransparency = 1
 OnlineProfilesButtonImage.Position = UDim2.new(0, 14, 0, 7)
 OnlineProfilesButtonImage.Size = UDim2.new(0, 17, 0, 16)
-OnlineProfilesButtonImage.Image = getcustomassetfunc("vape/assets/OnlineProfilesButton.png")
+OnlineProfilesButtonImage.Image = getcustomassetfunc("vape-v4/assets/OnlineProfilesButton.png")
 OnlineProfilesButtonImage.ImageColor3 = Color3.fromRGB(121, 121, 121)
 OnlineProfilesButtonImage.ZIndex = 1
 OnlineProfilesButtonImage.Active = false
@@ -489,7 +489,7 @@ OnlineProfilesExitButton.Name = "OnlineProfilesExitButton"
 OnlineProfilesExitButton.ImageColor3 = Color3.fromRGB(121, 121, 121)
 OnlineProfilesExitButton.Size = UDim2.new(0, 24, 0, 24)
 OnlineProfilesExitButton.AutoButtonColor = false
-OnlineProfilesExitButton.Image = getcustomassetfunc("vape/assets/ExitIcon1.png")
+OnlineProfilesExitButton.Image = getcustomassetfunc("vape-v4/assets/ExitIcon1.png")
 OnlineProfilesExitButton.Visible = true
 OnlineProfilesExitButton.Position = UDim2.new(1, -31, 0, 8)
 OnlineProfilesExitButton.BackgroundColor3 = Color3.fromRGB(26, 25, 26)
@@ -506,7 +506,7 @@ end)
 local OnlineProfilesFrameShadow = Instance.new("ImageLabel")
 OnlineProfilesFrameShadow.AnchorPoint = Vector2.new(0.5, 0.5)
 OnlineProfilesFrameShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-OnlineProfilesFrameShadow.Image = getcustomassetfunc("vape/assets/WindowBlur.png")
+OnlineProfilesFrameShadow.Image = getcustomassetfunc("vape-v4/assets/WindowBlur.png")
 OnlineProfilesFrameShadow.BackgroundTransparency = 1
 OnlineProfilesFrameShadow.ZIndex = -1
 OnlineProfilesFrameShadow.Size = UDim2.new(1, 6, 1, 6)
@@ -516,7 +516,7 @@ OnlineProfilesFrameShadow.SliceCenter = Rect.new(10, 10, 118, 118)
 OnlineProfilesFrameShadow.Parent = OnlineProfilesFrame
 local OnlineProfilesFrameIcon = Instance.new("ImageLabel")
 OnlineProfilesFrameIcon.Size = UDim2.new(0, 19, 0, 16)
-OnlineProfilesFrameIcon.Image = getcustomassetfunc("vape/assets/ProfilesIcon.png")
+OnlineProfilesFrameIcon.Image = getcustomassetfunc("vape-v4/assets/ProfilesIcon.png")
 OnlineProfilesFrameIcon.Name = "WindowIcon"
 OnlineProfilesFrameIcon.BackgroundTransparency = 1
 OnlineProfilesFrameIcon.Position = UDim2.new(0, 10, 0, 13)
@@ -677,18 +677,18 @@ OnlineProfilesExitButton.MouseButton1Click:Connect(function()
 end)
 
 GUI.CreateDivider()
----GUI.CreateCustomButton("Favorites", "vape/assets/FavoritesListIcon.png", UDim2.new(0, 17, 0, 14), function() end, function() end)
---GUI.CreateCustomButton("Text GUIVertical", "vape/assets/TextGUIIcon3.png", UDim2.new(1, -56, 0, 15), function() end, function() end)
+---GUI.CreateCustomButton("Favorites", "vape-v4/assets/FavoritesListIcon.png", UDim2.new(0, 17, 0, 14), function() end, function() end)
+--GUI.CreateCustomButton("Text GUIVertical", "vape-v4/assets/TextGUIIcon3.png", UDim2.new(1, -56, 0, 15), function() end, function() end)
 local TextGui = GuiLibrary.CreateCustomWindow({
 	["Name"] = "Text GUI", 
-	["Icon"] = "vape/assets/TextGUIIcon1.png", 
+	["Icon"] = "vape-v4/assets/TextGUIIcon1.png", 
 	["IconSize"] = 21
 })
 local TextGuiCircleObject = {["CircleList"] = {}}
---GUI.CreateCustomButton("Text GUI", "vape/assets/TextGUIIcon2.png", UDim2.new(1, -23, 0, 15), function() TextGui.SetVisible(true) end, function() TextGui.SetVisible(false) end, "OptionsButton")
+--GUI.CreateCustomButton("Text GUI", "vape-v4/assets/TextGUIIcon2.png", UDim2.new(1, -23, 0, 15), function() TextGui.SetVisible(true) end, function() TextGui.SetVisible(false) end, "OptionsButton")
 GUI.CreateCustomToggle({
 	["Name"] = "Text GUI", 
-	["Icon"] = "vape/assets/TextGUIIcon3.png",
+	["Icon"] = "vape-v4/assets/TextGUIIcon3.png",
 	["Function"] = function(callback) TextGui.SetVisible(callback) end,
 	["Priority"] = 2
 })	
@@ -714,7 +714,7 @@ onething.BackgroundColor3 = Color3.new(0, 0, 0)
 onething.BorderSizePixel = 0
 onething.BackgroundTransparency = 1
 onething.Visible = false
-onething.Image = getcustomassetfunc(translatedlogo and "vape/translations/"..GuiLibrary["Language"].."/VapeLogo3.png" or "vape/assets/VapeLogo3.png")
+onething.Image = getcustomassetfunc(translatedlogo and "vape-v4/translations/"..GuiLibrary["Language"].."/VapeLogo3.png" or "vape-v4/assets/VapeLogo3.png")
 local onething2 = Instance.new("ImageLabel")
 onething2.Parent = onething
 onething2.Size = UDim2.new(0, 41, 0, 24)
@@ -723,7 +723,7 @@ onething2.Position = UDim2.new(1, 0, 0, 1)
 onething2.BorderSizePixel = 0
 onething2.BackgroundColor3 = Color3.new(0, 0, 0)
 onething2.BackgroundTransparency = 1
-onething2.Image = getcustomassetfunc("vape/assets/VapeLogo4.png")
+onething2.Image = getcustomassetfunc("vape-v4/assets/VapeLogo4.png")
 local onething3 = onething:Clone()
 onething3.ImageColor3 = Color3.new(0, 0, 0)
 onething3.ImageTransparency = 0.5
@@ -986,25 +986,25 @@ textguimode = TextGui.CreateDropdown({
 		end
 		if val == "Drawing" then
 			local onethingdrawing = Drawing.new("Image")
-			onethingdrawing.Data = readfile(translatedlogo and "vape/translations/"..GuiLibrary["Language"].."/VapeLogo3.png" or "vape/assets/VapeLogo3.png")
+			onethingdrawing.Data = readfile(translatedlogo and "vape-v4/translations/"..GuiLibrary["Language"].."/VapeLogo3.png" or "vape-v4/assets/VapeLogo3.png")
 			onethingdrawing.Size = onething.AbsoluteSize
 			onethingdrawing.Position = onething.AbsolutePosition + Vector2.new(0, 36)
 			onethingdrawing.ZIndex = 2
 			onethingdrawing.Visible = onething.Visible
 			local onething2drawing = Drawing.new("Image")
-			onething2drawing.Data = readfile("vape/assets/VapeLogo4.png")
+			onething2drawing.Data = readfile("vape-v4/assets/VapeLogo4.png")
 			onething2drawing.Size = onething2.AbsoluteSize
 			onething2drawing.Position = onething2.AbsolutePosition + Vector2.new(0, 36)
 			onething2drawing.ZIndex = 2
 			onething2drawing.Visible = onething.Visible
 			local onething3drawing = Drawing.new("Image")
-			onething3drawing.Data = readfile(translatedlogo and "vape/translations/"..GuiLibrary["Language"].."/VapeLogo3.png" or "vape/assets/VapeLogo3.png")
+			onething3drawing.Data = readfile(translatedlogo and "vape-v4/translations/"..GuiLibrary["Language"].."/VapeLogo3.png" or "vape-v4/assets/VapeLogo3.png")
 			onething3drawing.Size = onething.AbsoluteSize
 			onething3drawing.Position = onething.AbsolutePosition + Vector2.new(1, 37)
 			onething3drawing.Transparency = 0.5
 			onething3drawing.Visible = onething.Visible and onething3.Visible
 			local onething4drawing = Drawing.new("Image")
-			onething4drawing.Data = readfile("vape/assets/VapeLogo4.png")
+			onething4drawing.Data = readfile("vape-v4/assets/VapeLogo4.png")
 			onething4drawing.Size = onething2.AbsoluteSize
 			onething4drawing.Position = onething2.AbsolutePosition + Vector2.new(1, 37)
 			onething4drawing.Transparency = 0.5
@@ -1229,7 +1229,7 @@ end
 
 local TargetInfo = GuiLibrary.CreateCustomWindow({
 	["Name"] = "Target Info",
-	["Icon"] = "vape/assets/TargetInfoIcon1.png",
+	["Icon"] = "vape-v4/assets/TargetInfoIcon1.png",
 	["IconSize"] = 16
 })
 local TargetInfoDisplayNames = TargetInfo.CreateToggle({
@@ -1284,7 +1284,7 @@ targethealthbkg.Parent = targetinfobkg3
 local healthbarbkgshadow = Instance.new("ImageLabel")
 healthbarbkgshadow.AnchorPoint = Vector2.new(0.5, 0.5)
 healthbarbkgshadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-healthbarbkgshadow.Image = getcustomassetfunc("vape/assets/WindowBlur.png")
+healthbarbkgshadow.Image = getcustomassetfunc("vape-v4/assets/WindowBlur.png")
 healthbarbkgshadow.BackgroundTransparency = 1
 healthbarbkgshadow.ImageTransparency = 0.6
 healthbarbkgshadow.ZIndex = -1
@@ -1368,7 +1368,7 @@ shared.VapeTargetInfo = {
 }
 GUI.CreateCustomToggle({
 	["Name"] = "Target Info", 
-	["Icon"] = "vape/assets/TargetInfoIcon2.png", 
+	["Icon"] = "vape-v4/assets/TargetInfoIcon2.png", 
 	["Function"] = function(callback) TargetInfo.SetVisible(callback) end,
 	["Priority"] = 1
 })
@@ -1679,7 +1679,7 @@ local teleported = false
 local teleportfunc = game:GetService("Players").LocalPlayer.OnTeleport:Connect(function(State)
     if (not teleported) and (not shared.VapeIndependent) then
 		teleported = true
-		local teleportstr = 'shared.VapeSwitchServers = true if shared.VapeDeveloper then loadstring(readfile("vape/NewMainScript.lua"))() else loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/gui/NewMainScript.lua", true))() end'
+		local teleportstr = 'shared.VapeSwitchServers = true if shared.VapeDeveloper then loadstring(readfile("vape-v4/NewMainScript.lua"))() else loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/gui/NewMainScript.lua", true))() end'
 		if shared.VapeDeveloper then
 			teleportstr = 'shared.VapeDeveloper = true '..teleportstr
 		end
@@ -1849,8 +1849,8 @@ if shared.VapeIndependent then
 	return GuiLibrary
 else
 	loadstring(GetURL("AnyGame.lua"))()
-	if betterisfile("vape/CustomModules/"..game.PlaceId..".lua") then
-		loadstring(readfile("vape/CustomModules/"..game.PlaceId..".lua"))()
+	if betterisfile("vape-v4/CustomModules/"..game.PlaceId..".lua") then
+		loadstring(readfile("vape-v4/CustomModules/"..game.PlaceId..".lua"))()
 	else
 		local publicrepo = checkpublicrepo(game.PlaceId)
 		if publicrepo then
@@ -1858,8 +1858,8 @@ else
 		end
 	end
 	if shared.VapePrivate then
-		if pcall(function() readfile("vapeprivate/CustomModules/"..game.PlaceId..".lua") end) then
-			loadstring(readfile("vapeprivate/CustomModules/"..game.PlaceId..".lua"))()
+		if pcall(function() readfile("vape-v4-private/CustomModules/"..game.PlaceId..".lua") end) then
+			loadstring(readfile("vape-v4-private/CustomModules/"..game.PlaceId..".lua"))()
 		end	
 	end
 	GuiLibrary["LoadSettings"](shared.VapeCustomProfile)
