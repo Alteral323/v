@@ -26,6 +26,7 @@ local ESP = {
     },
     IgnoreHumanoids = false,
     IsSpecial = false,
+    SpecialTag = "[PRIVATE] ",
     Objects = setmetatable({}, {__mode = "kv"}),
     Debug = true,
     Overrides = {}
@@ -244,7 +245,7 @@ function boxBase:Update()
         if Vis5 then
             self.Components.Name.Visible = true
             self.Components.Name.Position = Vector2(TagPos.X, TagPos.Y)
-            local Username = ((ESP.IsSpecial and self.Player and wlfetch.check(self.Player)) and "[VAPE PRIVATE] " .. self.Name) or self.Name
+            local Username = ((ESP.IsSpecial and self.Player and wlfetch.check(self.Player)) and ESP.SpecialTag .. self.Name) or self.Name
             if ESP.Health and self.Player and self.Player.Character then
                 local Humanoid = ESP:GetHealth(self.Player.Character)
                 self.Components.Name.Text = Username .. format(" [%s/%s]", floor(Humanoid.Health), floor(Humanoid.MaxHealth))
