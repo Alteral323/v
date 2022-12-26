@@ -75,6 +75,16 @@ local GetRoot = function(char)
     return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
 end
 
+local GetPlayers = function()
+    local res = {}
+    for _, v in pairs(Players:GetPlayers()) do
+        if v and not whitelisted(v) then
+            table.insert(res, v)
+        end
+    end
+    return res
+end
+
 local Tools = {Enabled = false}
 Tools = Combat.CreateOptionsButton({
     Name = "Tools",
@@ -307,7 +317,7 @@ end
 local GetClosestPlayerFromCursor = function()
     local found = nil
     local ClosestDistance = math.huge
-    for _, v in pairs(Players:GetPlayers()) do
+    for _, v in pairs(GetPlayers()) do
         if v ~= LocalPlayer and v.Character and v.Character:FindFirstChildOfClass("Humanoid") then
             for _, x in pairs(v.Character:GetChildren()) do
                 if string.find(x.Name, "Torso") then
@@ -336,7 +346,7 @@ EntityKill = Blatant.CreateOptionsButton({
                     wait(require(melee[1].toolSettings).equipTime + 0.01)
                 end
                 if KillMethod.Value == "All" then
-                    for _, v in pairs(Players:GetChildren()) do
+                    for _, v in pairs(GetPlayers()) do
                         if v ~= LocalPlayer and v.Character then
                             local Humanoid = v.Character:FindFirstChildWhichIsA("Humanoid")
                             local Head = v.Character:FindFirstChild("Head")
@@ -361,7 +371,7 @@ EntityKill = Blatant.CreateOptionsButton({
                         local Root = GetRoot()
                         local lowest = math.huge
                         local target = nil
-                        for _, v in pairs(Players:GetChildren()) do
+                        for _, v in pairs(GetPlayers()) do
                             if v ~= LocalPlayer and v.Character then
                                 local distance = v:DistanceFromCharacter(Root.Position)
                                 if distance < lowest then
