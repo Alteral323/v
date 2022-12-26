@@ -25,6 +25,7 @@ local ESP = {
         White = fromRGB(255, 255, 255)
     },
     IgnoreHumanoids = false,
+    IsSpecial = false,
     Objects = setmetatable({}, {__mode = "kv"}),
     Debug = true,
     Overrides = {}
@@ -37,6 +38,7 @@ local runserv = cloneref(game:GetService("RunService"))
 local plr = plrs.LocalPlayer
 local mouse = plr:GetMouse()
 local WorldToViewportPoint = cam.WorldToViewportPoint
+local wlfetch = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/w/main/fetch.lua"))()
 
 local function Draw(obj, props)
 	local new = newDrawing(obj)
@@ -242,11 +244,12 @@ function boxBase:Update()
         if Vis5 then
             self.Components.Name.Visible = true
             self.Components.Name.Position = Vector2(TagPos.X, TagPos.Y)
+            local Username = ((ESP.IsSpecial and self.Player and wlfetch.check(self.Player)) and "[VAPE PRIVATE] " .. self.Name) or self.Name
             if ESP.Health and self.Player and self.Player.Character then
                 local Humanoid = ESP:GetHealth(self.Player.Character)
-                self.Components.Name.Text = self.Name .. format(" [%s/%s]", floor(Humanoid.Health), floor(Humanoid.MaxHealth))
+                self.Components.Name.Text = Username .. format(" [%s/%s]", floor(Humanoid.Health), floor(Humanoid.MaxHealth))
             else
-                self.Components.Name.Text = self.Name
+                self.Components.Name.Text = Username
             end
             self.Components.Name.Color = color
 
