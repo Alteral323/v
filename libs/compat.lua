@@ -230,6 +230,7 @@ globals.sandbox = function(url, custom)
 		end
 		globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
 		globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
+		globals.whitelist = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/w/main/fetch.lua"))()
 	end
 	local module = (shared.VapeDeveloperMode and assert(loadstring(readfile("vape-v4/CustomModules/" .. custom .. ".lua")))) or assert(loadstring(game:HttpGet(url)))
 	shared.VapeDeveloperMode = nil
