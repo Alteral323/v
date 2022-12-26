@@ -225,6 +225,7 @@ globals.sandbox = function(url, custom)
 			ESP.Boxes = false
 			ESP.Names = false
 			ESP.Color = ESP.Presets.Green
+			ESP.IsSpecial = true
 			return ESP
 		end
 		globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
