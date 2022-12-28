@@ -51,10 +51,9 @@ NewESP.CreateToggle({
     end
 })
 
-local Bizarre = {
+local Remotes = {
     Damage = ReplicatedStorage.Damage,
     SpaceRipper = ReplicatedStorage.SpaceRipperStingyEyes,
-    Hamon = ReplicatedStorage.HamonSword,
     Epitaph = ReplicatedStorage.DoppioEpitaph,
     TETeleport = ReplicatedStorage.TETeleport,
     RTZEffect = ReplicatedStorage.RTZEffect
@@ -95,7 +94,7 @@ SatansEyes = Combat.CreateOptionsButton({
         if callback then
             SatansEyes.ToggleButton(false)
             for i = 1, 30 do
-                Bizarre.SpaceRipper:FireServer()
+                Remotes.SpaceRipper:FireServer()
             end
         end
     end
@@ -128,7 +127,7 @@ Slash = Combat.CreateOptionsButton({
                                 [11] = 0.4
                             }
                             for i = 1, 1000 do
-                                Bizarre.Damage:FireServer(unpack(args))
+                                Remotes.Damage:FireServer(unpack(args))
                             end
                         end
                     end
@@ -137,20 +136,22 @@ Slash = Combat.CreateOptionsButton({
         end
     end
 })
+--[[
 SlashMethod = Slash.CreateDropdown({
     Name = "Mode", 
     List = {"Cursor"},
     Function = function() end
 })
+]]
 
 local Immortality = {Enabled = false}
 Immortality = Blatant.CreateOptionsButton({
     Name = "Immortality",
     Function = function(callback)
         if callback then
-            Bizarre.Epitaph:FireServer()
+            Remotes.Epitaph:FireServer()
             repeat wait(0.5)
-                Bizarre.Epitaph:FireServer()
+                Remotes.Epitaph:FireServer()
             until not Immortality.Enabled
         end
     end,
@@ -163,7 +164,7 @@ Aura = Blatant.CreateOptionsButton({
     Function = function(callback)
         if callback then
             repeat wait()
-                Bizarre.TETeleport:FireServer(BrickColor.new("Light blue"))
+                Remotes.TETeleport:FireServer(BrickColor.new("Light blue"))
             until not Aura.Enabled
         end
     end,
@@ -176,7 +177,7 @@ BlackOrb = Blatant.CreateOptionsButton({
     Function = function(callback)
         if callback then
             repeat wait(0.1)
-                Bizarre.RTZEffect:FireServer(true)
+                Remotes.RTZEffect:FireServer(true)
             until not BlackOrb.Enabled
         end
     end
