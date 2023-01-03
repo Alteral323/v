@@ -29,11 +29,11 @@ local firetouched = {}
 local networkownertick = tick()
 local oldpairs = pairs
 local table_find = function(t, v)
-	for _, val in next, t do 
-		if val == v then 
-			return val   
-		end    
-	end    
+	for _, val in next, t do
+		if val == v then
+			return val
+		end
+	end
 end
 local globals = {}
 
@@ -84,7 +84,7 @@ globals.getupvalues = (debug and debug.getupvalues) or getupvalues or getupvals
 globals.getconstants = (debug and debug.getconstants) or getconstants or getconsts
 globals.setupvalue = (debug and debug.setupvalue) or setupvalue or setupval
 globals.setconstant = (debug and debug.setconstant) or setconstant or setconst
-globals.getinfo = getinfo or (debug and (debug.getinfo or debug.info))
+globals.getinfo = (debug and (debug.getinfo or debug.info)) or getinfo
 globals.hookfunction = hookfunction or function(func, newfunc, applycclosure)
 	if replaceclosure then
 		replaceclosure(func, newfunc)
