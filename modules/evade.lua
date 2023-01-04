@@ -164,10 +164,10 @@ Speed = Blatant.CreateOptionsButton({
 })
 SpeedVal = Speed.CreateSlider({
     Name = "Value",
-    Min = 1450,
+    Min = 1500,
     Max = 12000,
     Function = function() end,
-    Default = 2900
+    Default = 3000
 })
 
 local JumpPower = {Enabled = false}
