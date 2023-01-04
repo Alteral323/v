@@ -18,14 +18,14 @@ ESP:AddObjectListener(workspace, {
     end,
     Color = ESP.Presets.Red,
     Validator = function(obj)
-        return obj:GetAttribute("AI") and obj:GetAttribute("AI") == true
+        return obj:GetAttribute("AI") == true
     end,
-    IsEnabled = "nextbotEsp"
+    IsEnabled = "NextbotEsp"
 })
 
 ESP.Overrides.GetColor = function(character)
     local player = ESP:GetPlrFromChar(character)
-    if player and ESP.downedEsp and player.Character:GetAttribute("Downed") == true then
+    if player and ESP.DownedEsp and player.Character:GetAttribute("Downed") == true then
         return ESP.Presets.Blue
     end
     return ESP.Color
@@ -47,14 +47,14 @@ NewESP.CreateToggle({
 NewESP.CreateToggle({
     Name = "Downed",
     Function = function(callback)
-        ESP.downedEsp = callback
+        ESP.DownedEsp = callback
     end,
     Default = true
 })
 NewESP.CreateToggle({
     Name = "Nextbots",
     Function = function(callback)
-        ESP.nextbotEsp = callback
+        ESP.NextbotEsp = callback
     end,
     Default = true
 })
@@ -256,3 +256,24 @@ LocalPlayer.CharacterAdded:Connect(function(character)
         end
     end
 end)
+
+if workspace.Game.Settings.Update:GetAttribute("UpdateLogVersion") == "XMAS22" then
+    ESP:AddObjectListener(workspace, {
+        Type = "Model",
+        Recursive = true,
+        PrimaryPart = "HumanoidRootPart",
+        CustomName = "Gift"
+        Color = ESP.Presets.Orange,
+        Validator = function(obj)
+            return obj.Parent == workspace.Game.Effects.Tickets
+        end,
+        IsEnabled = "ChristmasGiftsEsp"
+    })
+    NewESP.CreateToggle({
+        Name = "Gifts",
+        Function = function(callback)
+            ESP.ChristmasGiftsEsp = callback
+        end,
+        Default = true
+    })
+end
