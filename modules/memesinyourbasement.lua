@@ -58,17 +58,26 @@ local Tycoon = (function()
             return tycoon
         end
     end
-    repeat wait() until GetRoot() ~= nil
-    local Root = GetRoot()
-    if Root then
-        for _, tycoon in pairs(workspace.Tycoons:GetChildren()) do
-            if tycoon:FindFirstChild("TycoonOwner") and tycoon.TycoonOwner.Value == "p" then
-                firetouchinterest(Root, tycoon.Claim.Claim, 0)
-                return tycoon
-            end
-        end
-    end
 end)()
+
+if Tycoon == nil then
+    GuiLibrary.SelfDestruct()
+    pcall(function()
+        local ErrorPrompt = getrenv().require(game:GetService("CoreGui").RobloxGui.Modules.ErrorPrompt)
+        local prompt = ErrorPrompt.new("Default")
+        prompt._hideErrorCode = true
+        local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
+        prompt:setParent(gui)
+        prompt:setErrorTitle("Vape")
+        prompt:updateButtons({{
+            Text = "OK",
+            Callback = function() prompt:_close() end,
+            Primary = true
+        }}, "Default")
+        prompt:_open("You need a tycoon before you execute the script.")
+    end)
+    return
+end
 
 local AutoUpload = {Enabled = false}
 AutoUpload = Utility.CreateOptionsButton({
@@ -138,8 +147,7 @@ AutoCollect = World.CreateOptionsButton({
 do
     local old
     old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
-        local method = getnamecallmethod()
-        if BypassGamepass.Enabled and tostring(self) == "MarketplaceService" and method == "UserOwnsGamePassAsync" then
+        if BypassGamepass.Enabled and tostring(self) == "MarketplaceService" and getnamecallmethod() == "UserOwnsGamePassAsync" then
             return true
         end
         return old(self, ...)
