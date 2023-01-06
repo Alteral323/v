@@ -5,7 +5,8 @@ local IDs = {
     [10243982775] = "redbox",
     [9256427353] = "async",
     [2686500207] = "abd",
-    [9000622508] = "mosacademy"
+    [9000622508] = "mosacademy",
+    [11346342371] = "memesinyourbasement"
 }
 local modules = "https://raw.githubusercontent.com/Alteral323/v/main/modules/"
 local compat = "https://raw.githubusercontent.com/Alteral323/v/main/libs/compat.lua"
