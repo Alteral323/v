@@ -29,7 +29,7 @@ ESP.Overrides.GetColor = function(character)
         return ESP.Presets.Blue
     end
     return ESP.Color
- end
+end
 
 local NewESP = Render.CreateOptionsButton({
     Name = "ESP",
