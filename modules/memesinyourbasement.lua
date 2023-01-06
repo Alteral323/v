@@ -60,25 +60,6 @@ local Tycoon = (function()
     end
 end)()
 
-if Tycoon == nil then
-    GuiLibrary.SelfDestruct()
-    pcall(function()
-        local ErrorPrompt = getrenv().require(game:GetService("CoreGui").RobloxGui.Modules.ErrorPrompt)
-        local prompt = ErrorPrompt.new("Default")
-        prompt._hideErrorCode = true
-        local gui = Instance.new("ScreenGui", game:GetService("CoreGui"))
-        prompt:setParent(gui)
-        prompt:setErrorTitle("Vape")
-        prompt:updateButtons({{
-            Text = "OK",
-            Callback = function() prompt:_close() end,
-            Primary = true
-        }}, "Default")
-        prompt:_open("You need a tycoon before you execute the script.")
-    end)
-    return
-end
-
 local AutoUpload = {Enabled = false}
 AutoUpload = Utility.CreateOptionsButton({
     Name = "AutoUpload",
