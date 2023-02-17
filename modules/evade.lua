@@ -257,23 +257,22 @@ LocalPlayer.CharacterAdded:Connect(function(character)
     end
 end)
 
-if workspace.Game.Settings.Update:GetAttribute("UpdateLogVersion") == "XMAS22" then
-    ESP:AddObjectListener(workspace, {
-        Type = "Model",
-        Recursive = true,
-        PrimaryPart = "HumanoidRootPart",
-        CustomName = "Gift",
-        Color = ESP.Presets.Orange,
-        Validator = function(obj)
-            return obj.Parent == workspace.Game.Effects.Tickets
-        end,
-        IsEnabled = "ChristmasGiftsEsp"
-    })
-    NewESP.CreateToggle({
-        Name = "Gifts",
-        Function = function(callback)
-            ESP.ChristmasGiftsEsp = callback
-        end,
-        Default = true
-    })
-end
+local Special = workspace.Game.Settings.Update:GetAttribute("UpdateLogVersion")
+ESP:AddObjectListener(workspace, {
+    Type = "Model",
+    Recursive = true,
+    PrimaryPart = "HumanoidRootPart",
+    CustomName = (Special == "VAL23" and "Card") or "Ticket",
+    Color = (Special == "VAL23" and ESP.Presets.Pink) or ESP.Presets.Orange,
+    Validator = function(obj)
+        return obj.Parent == workspace.Game.Effects.Tickets
+    end,
+    IsEnabled = "TicketEsp"
+})
+NewESP.CreateToggle({
+    Name = "Tickets",
+    Function = function(callback)
+        ESP.TicketEsp = callback
+    end,
+    Default = true
+})
