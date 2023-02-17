@@ -262,7 +262,7 @@ ESP:AddObjectListener(workspace, {
     Type = "Model",
     Recursive = true,
     PrimaryPart = "HumanoidRootPart",
-    CustomName = (Special == "VAL23" and "Card") or "Ticket",
+    CustomName = (Special == "VAL23" and "Envelope") or "Ticket",
     Color = (Special == "VAL23" and ESP.Presets.Pink) or ESP.Presets.Orange,
     Validator = function(obj)
         return obj.Parent == workspace.Game.Effects.Tickets
