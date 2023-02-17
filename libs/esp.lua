@@ -22,7 +22,8 @@ local ESP = {
         Red = fromRGB(255, 0, 128),
         Orange = fromRGB(255, 162, 0),
         Blue = fromRGB(0, 145, 255),
-        White = fromRGB(255, 255, 255)
+        White = fromRGB(255, 255, 255),
+        Pink = fromRGB(255, 0, 255)
     },
     IgnoreHumanoids = false,
     IsSpecial = false,
