@@ -262,7 +262,7 @@ if workspace.Game.Settings.Update:GetAttribute("UpdateLogVersion") == "XMAS22" t
         Type = "Model",
         Recursive = true,
         PrimaryPart = "HumanoidRootPart",
-        CustomName = "Gift"
+        CustomName = "Gift",
         Color = ESP.Presets.Orange,
         Validator = function(obj)
             return obj.Parent == workspace.Game.Effects.Tickets
