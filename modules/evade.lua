@@ -88,12 +88,10 @@ local Fullbright = Render.CreateOptionsButton({
             Lighting.GlobalShadows = false
             Lighting.ClockTime = 12
         else
-            if workspace:FindFirstChild("Game") and workspace.Game:FindFirstChild("Map") and workspace.Game.Map:FindFirstChild("Lighting") and workspace.Game.Map.Lighting:FindFirstChild("Stats") then
-                local stats = require(workspace.Game.Map.Lighting.Stats)
-                if type(stats) == "table" then
-                    for i, v in pairs(stats) do
-                        Lighting[i] = v
-                    end
+            local data = require(workspace.Game.Map.Lighting.Stats)
+            if type(data) == "table" then
+                for property, value in next, data do
+                    Lighting[property] = value
                 end
             end
         end
@@ -136,13 +134,13 @@ SlipperyFloor = World.CreateOptionsButton({
     Name = "SlipperyFloor",
     Function = function(callback)
         if callback then
-            if LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Movement") then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Movement") then
                 setconstant(require(LocalPlayer.Character.Movement).ApplyFriction, 9, 0.1)
             else
                 SlipperyFloor.ToggleButton(false)
             end
         else
-            if LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Movement") then
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Movement") then
                 setconstant(require(LocalPlayer.Character.Movement).ApplyFriction, 9, 5)
             end
         end
@@ -190,7 +188,7 @@ GlobalChat = Blatant.CreateOptionsButton({
     Function = function(callback)
         spawn(function()
             repeat wait(0.1)
-                if LocalPlayer and LocalPlayer:FindFirstChild("PlayerScripts") and LocalPlayer.PlayerScripts:FindFirstChild("ChatScript") then
+                if LocalPlayer:FindFirstChild("PlayerScripts") and LocalPlayer.PlayerScripts:FindFirstChild("ChatScript") then
                     LocalPlayer.PlayerScripts.ChatScript:SetAttribute("GlobalChatEnabled", true)
                 end
             until not GlobalChat.Enabled
