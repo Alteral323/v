@@ -207,6 +207,23 @@ globals.filtergc = filtergc or (globals.getgc and function(Type, Data, One)
 	end
 	return Results
 end)
+globals.filter = function(tbl, func)
+	local new = {}
+	for i, v in next, tbl do
+		if func(i, v) then
+			new[#new + 1] = v
+		end
+	end
+	return new
+end
+globals.map = function(tbl, func)
+	local new = {}
+	for i, v in next, tbl do
+		local k, x = func(i, v)
+		new[x or #new + 1] = k
+	end
+	return new
+end
 globals.sandbox = function(url, custom)
 	if type(url) ~= "string" and url == true then
 		local genv = (getgenv and getgenv()) or _G
@@ -225,7 +242,6 @@ globals.sandbox = function(url, custom)
 			ESP.Boxes = false
 			ESP.Names = false
 			ESP.Color = ESP.Presets.Green
-			ESP.IsSpecial = true
 			return ESP
 		end
 		globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
