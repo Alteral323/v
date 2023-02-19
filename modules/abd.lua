@@ -87,16 +87,6 @@ local GetRoot = function(char)
     return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
 end
 
-local GetPlayers = function()
-    local res = {}
-    for _, v in pairs(Players:GetPlayers()) do
-        if v and not whitelisted(v) then
-            table.insert(res, v)
-        end
-    end
-    return res
-end
-
 local WorldToScreen = function(Object)
 	local ObjectVector = workspace.CurrentCamera:WorldToScreenPoint(Object.Position)
 	return Vector2.new(ObjectVector.X, ObjectVector.Y)
@@ -109,7 +99,7 @@ end
 local GetClosestPlayerFromCursor = function()
     local found = nil
     local ClosestDistance = math.huge
-    for _, player in pairs(GetPlayers()) do
+    for _, player in pairs(Players:GetPlayers()) do
         if player ~= LocalPlayer and player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
             for _, object in pairs(player.Character:GetChildren()) do
                 if object.Name == "Head" and object.Parent == player.Character then
@@ -176,7 +166,7 @@ Slash = Combat.CreateOptionsButton({
                     local Root = GetRoot()
                     local lowest = math.huge
                     local target = nil
-                    for _, v in pairs(GetPlayers()) do
+                    for _, v in pairs(Players:GetPlayers()) do
                         if v ~= LocalPlayer and v.Character then
                             local distance = v:DistanceFromCharacter(Root.Position)
                             if distance < lowest then
@@ -210,7 +200,7 @@ Slash = Combat.CreateOptionsButton({
             end
             if SlashMethod.Value == "All" then
                 if LocalPlayer and LocalPlayer.Character then
-                    for _, target in pairs(GetPlayers()) do
+                    for _, target in pairs(Players:GetPlayers()) do
                         if target ~= LocalPlayer and target.Character then
                             local Humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
                             if Humanoid and Humanoid.Health > 0 then
@@ -288,7 +278,7 @@ StaffWatch = Utility.CreateOptionsButton({
     Name = "StaffCheck",
     Function = function(callback)
         if callback then
-            for _, player in next, GetPlayers() do
+            for _, player in next, Players:GetPlayers() do
                 if player ~= LocalPlayer then
                     CheckStaff(player)
                 end
