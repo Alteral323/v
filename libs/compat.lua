@@ -27,7 +27,6 @@ end
 local gsub = string.gsub
 local firetouched = {}
 local networkownertick = tick()
-local oldpairs = pairs
 local table_find = function(t, v)
 	for _, val in next, t do
 		if val == v then
@@ -118,19 +117,6 @@ globals.getcustomasset = getsynasset or getcustomasset or function(location)
 	return "rbxasset://" .. location
 end
 globals.isexecutorclosure = isexecutorclosure or is_synapse_function
-globals.pairs = function(tbl, func)
-	if func and type(func) == "function" then
-		local new = {}
-		for i, v in next, tbl do
-			if func(i, v) then
-				new[#new + 1] = v
-			end
-		end
-		return new
-	else
-		return oldpairs(tbl)
-	end
-end
 globals.cloneref = cloneref
 local GarbageCollectorChecks = {
     ["function"] = function(Obj, Data) 
