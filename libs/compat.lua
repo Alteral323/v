@@ -240,4 +240,9 @@ globals.sandbox = function(url, custom)
 	return module() or {}
 end
 
+--[[
+local compat = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/compat.lua"))()("/")
+setfenv(1, setmetatable(compat, {__index = getfenv(1)}))
+]]
+
 return globals.sandbox
