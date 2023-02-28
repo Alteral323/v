@@ -23,6 +23,7 @@ local ESP = {
 		Red = fromRGB(255, 0, 128),
 		Orange = fromRGB(255, 162, 0),
 		Blue = fromRGB(0, 145, 255),
+		MediumBlue = fromRGB(110, 153, 202),
 		White = fromRGB(255, 255, 255),
 		Black = fromRGB(0, 0, 0),
 		Pink = fromRGB(255, 0, 255),
@@ -98,13 +99,21 @@ function ESP:GetHealth(character)
     return {Health = 0, MaxHealth = 0}
 end
 
+local GetLongUsername = function(player)
+	if player.DisplayName ~= player.Name then
+		return format("%s (%s)", player.Name, player.DisplayName)
+	else
+		return player.Name
+	end
+end
+
 function ESP:GetName(character)
     local override = self.Overrides.GetName
     if override then
         return override(character)
     end
     local player = self:GetPlrFromChar(character)
-    return (player and player.Name) or "Invalid Name"
+    return (player and GetLongUsername(player)) or "Invalid Name"
 end
 
 function ESP:Toggle(bool)
@@ -141,9 +150,7 @@ function ESP:AddObjectListener(parent, options)
                         IsEnabled = options.IsEnabled,
                         RenderInNil = options.RenderInNil
                     })
-                    if options.OnAdded then
-                        wrap(options.OnAdded)(box)
-                    end
+                    if options.OnAdded then wrap(options.OnAdded)(box) end
                 end
             end
         end
@@ -175,9 +182,7 @@ function boxBase:Remove()
 end
 
 function boxBase:Update()
-    if not self.PrimaryPart then
-        return self:Remove()
-    end
+    if not self.PrimaryPart then return self:Remove() end
 
     local color
     if ESP.Highlighted == self.Object then
@@ -187,21 +192,11 @@ function boxBase:Update()
     end
 
     local allow = true
-    if ESP.Overrides.UpdateAllow and not ESP.Overrides.UpdateAllow(self) then
-        allow = false
-    end
-    if self.Player and not ESP.TeamMates and ESP:IsTeamMate(self.Player) then
-        allow = false
-    end
-    if self.Player and not ESP.Players then
-        allow = false
-    end
-    if self.IsEnabled and (type(self.IsEnabled) == "string" and not ESP[self.IsEnabled] or type(self.IsEnabled) == "function" and not self:IsEnabled()) then
-        allow = false
-    end
-    if not workspace:IsAncestorOf(self.PrimaryPart) and not self.RenderInNil then
-        allow = false
-    end
+    if ESP.Overrides.UpdateAllow and not ESP.Overrides.UpdateAllow(self) then allow = false end
+    if self.Player and not ESP.TeamMates and ESP:IsTeamMate(self.Player) then allow = false end
+    if self.Player and not ESP.Players then allow = false end
+    if self.IsEnabled and (type(self.IsEnabled) == "string" and not ESP[self.IsEnabled] or type(self.IsEnabled) == "function" and not self:IsEnabled()) then allow = false end
+    if not workspace:IsAncestorOf(self.PrimaryPart) and not self.RenderInNil then allow = false end
 
     if not allow then
         for _, v in pairs(self.Components) do
@@ -210,14 +205,9 @@ function boxBase:Update()
         return
     end
 
-    if ESP.Highlighted == self.Object then
-        color = ESP.HighlightColor
-    end
+    if ESP.Highlighted == self.Object then color = ESP.HighlightColor end
 
-    local cf = self.PrimaryPart.CFrame
-    if ESP.FaceCamera then
-        cf = newCFrame(cf.p, cam.CFrame.p)
-    end
+    local cf = (ESP.FaceCamera and newCFrame(cf.p, cam.CFrame.p)) or self.PrimaryPart.CFrame
     local size = self.Size
     local locs = {
         TopLeft = cf * ESP.BoxShift * newCFrame(size.X/2,size.Y/2,0),
@@ -233,7 +223,6 @@ function boxBase:Update()
         local TopRight, Vis2 = WorldToViewportPoint(cam, locs.TopRight.p)
         local BottomLeft, Vis3 = WorldToViewportPoint(cam, locs.BottomLeft.p)
         local BottomRight, Vis4 = WorldToViewportPoint(cam, locs.BottomRight.p)
-
         if self.Components.Quad then
             if Vis1 or Vis2 or Vis3 or Vis4 then
                 self.Components.Quad.Visible = true
@@ -252,40 +241,40 @@ function boxBase:Update()
 
     if ESP.Names then
         local TagPos, Vis5 = WorldToViewportPoint(cam, locs.TagPos.p)
-
         if Vis5 then
             self.Components.Name.Visible = true
             self.Components.Name.Position = Vector2(TagPos.X, TagPos.Y)
-            if ESP.Health and self.Player and self.Player.Character then
-                local Humanoid = ESP:GetHealth(self.Player.Character)
-                local NewName = ESP:GetName(self.Player.Character)
+            local Humanoid, NewName = ESP:GetHealth(self.Player.Character), ESP:GetName(self.Player.Character)
+            if ESP.Health then
                 self.Components.Name.Text = NewName .. format(" [%s/%s]", floor(Humanoid.Health), floor(Humanoid.MaxHealth))
             else
                 self.Components.Name.Text = NewName
             end
             self.Components.Name.Color = color
-
-            if ESP.Distance then
-                self.Components.Distance.Visible = true
-                self.Components.Distance.Position = Vector2(TagPos.X, TagPos.Y + 14)
-                self.Components.Distance.Text = floor((cam.CFrame.p - cf.p).magnitude) .. "m away"
-                self.Components.Distance.Color = color
-            else
-                self.Components.Distance.Visible = false
-            end
         else
             self.Components.Name.Visible = false
-            self.Components.Distance.Visible = false
         end
     else
         self.Components.Name.Visible = false
+    end
+
+    if ESP.Distance then
+        local TagPos, Vis6 = WorldToViewportPoint(cam, locs.TagPos.p)
+        if Vis6 then
+            self.Components.Distance.Visible = true
+            self.Components.Distance.Position = Vector2(TagPos.X, TagPos.Y + 14)
+            self.Components.Distance.Text = floor((cam.CFrame.p - cf.p).magnitude) .. "m away"
+            self.Components.Distance.Color = color
+        else
+            self.Components.Distance.Visible = false
+        end
+    else
         self.Components.Distance.Visible = false
     end
 
     if ESP.Tracers then
-        local TorsoPos, Vis6 = WorldToViewportPoint(cam, locs.Torso.p)
-
-        if Vis6 then
+        local TorsoPos, Vis7 = WorldToViewportPoint(cam, locs.Torso.p)
+        if Vis7 then
             self.Components.Tracer.Visible = true
             self.Components.Tracer.From = Vector2(TorsoPos.X, TorsoPos.Y)
             self.Components.Tracer.To = Vector2(cam.ViewportSize.X/2,cam.ViewportSize.Y/ESP.AttachShift)
@@ -319,9 +308,7 @@ function ESP:Add(obj, options)
         RenderInNil = options.RenderInNil
     }, boxBase)
 
-    if self:GetBox(obj) then
-        self:GetBox(obj):Remove()
-    end
+    if self:GetBox(obj) then self:GetBox(obj):Remove() end
 
     box.Components["Quad"] = Draw("Quad", {
         Thickness = self.Thickness,
@@ -343,7 +330,7 @@ function ESP:Add(obj, options)
 		Center = true,
 		Outline = true,
         Size = 19,
-        Visible = self.Enabled and self.Names
+        Visible = self.Enabled and self.Distance
 	})
 
 	box.Components["Tracer"] = Draw("Line", {
@@ -437,7 +424,7 @@ local chamfolder = nil
 local chamsEnabled = false
 function ESP:Chams(enabled)
     chamsEnabled = enabled
-    if enabled then
+    if chamsEnabled then
         if chamfolder then
             chamfolder:Destroy()
             chamfolder = nil
@@ -451,17 +438,21 @@ function ESP:Chams(enabled)
                         local char = v.Character
                         if chamfolder ~= nil and char ~= nil then
                             local hitbox = chamfolder:FindFirstChild(v.Name) or Instance.new("Highlight")
+                            local allow = true
+                            if not ESP.TeamMates and ESP:IsTeamMate(v) then allow = false end
+                            local hitboxColor = (ESP.TeamColor and v.TeamColor.Color) or ESP.Color
                             hitbox.Name = v.Name
                             hitbox.Parent = chamfolder
                             hitbox.Adornee = char
-                            hitbox.OutlineColor = v.TeamColor.Color
+                            hitbox.OutlineColor = hitboxColor
                             hitbox.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-                            hitbox.FillColor = v.TeamColor.Color
+                            hitbox.FillColor = hitboxColor
                             hitbox.FillTransparency = 0.5
+                            hitbox.Enabled = allow
                         end
                     end
                 end
-            until not chamsEnabled or not ESP.Enabled
+            until not chamsEnabled
         end)
     else
         if chamfolder then
