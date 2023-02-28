@@ -211,10 +211,7 @@ globals.map = function(tbl, func)
 	return new
 end
 globals.sandbox = function(url, custom)
-	if url == "/" then
-		setfenv(1, setmetatable(globals, {__index = getfenv(1)}))
-		return {}
-	end
+	if url == "/" then return globals end
 	if type(url) ~= "string" and url == true then
 		local genv = (getgenv and getgenv()) or _G
 		for i, v in pairs(globals) do
