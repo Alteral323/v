@@ -180,62 +180,62 @@ local GarbageCollectorChecks = {
     end,
 }
 globals.filtergc = filtergc or (globals.getgc and function(Type, Data, One)
-	local Results = {}
-	for _, v in next, globals.getgc(true) do
-		if type(v) == Type then
-			if GarbageCollectorChecks[Type](v, Data) then
-				if One then
-					return v
-				end
-				table.insert(Results, v)
-			end
-		end
-	end
-	return Results
+    local Results = {}
+    for _, v in next, globals.getgc(true) do
+        if type(v) == Type then
+            if GarbageCollectorChecks[Type](v, Data) then
+                if One then
+                    return v
+                end
+                table.insert(Results, v)
+            end
+        end
+    end
+    return Results
 end)
 globals.filter = function(tbl, func)
-	local new = {}
-	for i, v in next, tbl do
-		if func(i, v) then
-			new[#new + 1] = v
-		end
-	end
-	return new
+    local new = {}
+    for i, v in next, tbl do
+        if func(i, v) then
+            new[#new + 1] = v
+        end
+    end
+    return new
 end
 globals.map = function(tbl, func)
-	local new = {}
-	for i, v in next, tbl do
-		local k, x = func(i, v)
-		new[x or #new + 1] = k
-	end
-	return new
+    local new = {}
+    for i, v in next, tbl do
+        local k, x = func(i, v)
+        new[x or #new + 1] = k
+    end
+    return new
 end
 globals.ImportESP = function()
-	local ESP = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua")
-	ESP:Toggle(false)
-	ESP.Players = false
-	ESP.Tracers = false
-	ESP.Boxes = false
-	ESP.Names = false
-	ESP.Color = ESP.Presets.Green
-	return ESP
+    local ESP = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua")
+    ESP:Toggle(false)
+    ESP.Players = false
+    ESP.Tracers = false
+    ESP.Boxes = false
+    ESP.Names = false
+    ESP.Color = ESP.Presets.Green
+    return ESP
 end
 globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
 globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
 globals.sandbox = function(url, custom)
-	if url == "/" then return globals end
-	if type(url) ~= "string" and url == true then
-		local genv = (getgenv and getgenv()) or _G
-		for i, v in pairs(globals) do
-			genv[i] = v
-		end
-		return {}
-	end
-	if custom and type(custom) == "string" then globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom) end
-	local module = (shared.VapeDeveloperMode and assert(loadstring(readfile("vape-v4/CustomModules/" .. custom .. ".lua")))) or assert(loadstring(game:HttpGet(url)))
-	shared.VapeDeveloperMode = nil
-	setfenv(module, setmetatable(globals, {__index = getfenv(1)}))
-	return module() or {}
+    if url == "/" then return globals end
+    if type(url) ~= "string" and url == true then
+        local genv = (getgenv and getgenv()) or _G
+        for i, v in pairs(globals) do
+            genv[i] = v
+        end
+        return {}
+    end
+    if custom and type(custom) == "string" then globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom) end
+    local module = (shared.VapeDeveloperMode and assert(loadstring(readfile("vape-v4/CustomModules/" .. custom .. ".lua")))) or assert(loadstring(game:HttpGet(url)))
+    shared.VapeDeveloperMode = nil
+    setfenv(module, setmetatable(globals, {__index = getfenv(1)}))
+    return module() or {}
 end
 
 --[[
