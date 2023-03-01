@@ -210,6 +210,18 @@ globals.map = function(tbl, func)
 	end
 	return new
 end
+globals.ImportESP = function()
+	local ESP = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua")
+	ESP:Toggle(false)
+	ESP.Players = false
+	ESP.Tracers = false
+	ESP.Boxes = false
+	ESP.Names = false
+	ESP.Color = ESP.Presets.Green
+	return ESP
+end
+globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
+globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
 globals.sandbox = function(url, custom)
 	if url == "/" then return globals end
 	if type(url) ~= "string" and url == true then
@@ -219,21 +231,7 @@ globals.sandbox = function(url, custom)
 		end
 		return {}
 	end
-	if custom and type(custom) == "string" then
-		globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom)
-		globals.ImportESP = function()
-			local ESP = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/esp.lua")
-			ESP:Toggle(false)
-			ESP.Players = false
-			ESP.Tracers = false
-			ESP.Boxes = false
-			ESP.Names = false
-			ESP.Color = ESP.Presets.Green
-			return ESP
-		end
-		globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
-		globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
-	end
+	if custom and type(custom) == "string" then globals.GuiLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/ui.lua"))()(custom) end
 	local module = (shared.VapeDeveloperMode and assert(loadstring(readfile("vape-v4/CustomModules/" .. custom .. ".lua")))) or assert(loadstring(game:HttpGet(url)))
 	shared.VapeDeveloperMode = nil
 	setfenv(module, setmetatable(globals, {__index = getfenv(1)}))
@@ -241,8 +239,7 @@ globals.sandbox = function(url, custom)
 end
 
 --[[
-local compat = loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/compat.lua"))()("/")
-setfenv(1, setmetatable(compat, {__index = getfenv(1)}))
+setfenv(1, setmetatable(loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/compat.lua"))()("/"), {__index = getfenv(1)}))
 ]]
 
 return globals.sandbox
