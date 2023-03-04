@@ -47,35 +47,27 @@ local LoadURL = function(url) return loadstring(game:HttpGet(url))() end
 local firetouched = {}
 local networkownertick = tick()
 local PressedKeyCache = {}
-local GetKeyName = function(input)
-	return split(tostring(input), ".")[3]
-end
-local GetStringFromKeyCode = function(input)
-	return globals.filter(Enum.KeyCode:GetEnumItems(), function(_, v)
-		return Services.UserInputService:GetStringForKeyCode(v) == input and v
-	end)[1]
-end
+local GetKeyCodeName = function(input) return split(tostring(input), ".")[3] end
 Services.UserInputService.InputBegan:Connect(function(input, processed)
 	if not processed then
 		if find(tostring(input.UserInputType), "MouseButton") then
-			input = GetKeyName(input.UserInputType)
+			input = GetKeyCodeName(input.UserInputType)
 			PressedKeyCache[input] = true
 			PressedKeyCache[gsub(input, "MouseButton", "MB")] = true
 			return
 		end
-		input = GetKeyName(input.KeyCode)
-		PressedKeyCache[input] = true
+		PressedKeyCache[GetKeyCodeName(input.KeyCode)] = true
 	end
 end)
 Services.UserInputService.InputEnded:Connect(function(input, processed)
 	if not processed then
 		if find(tostring(input.UserInputType), "MouseButton") then
-			input = GetKeyName(input.UserInputType)
+			input = GetKeyCodeName(input.UserInputType)
 			PressedKeyCache[input] = false
 			PressedKeyCache[gsub(input, "MouseButton", "MB")] = false
 			return
 		end
-		PressedKeyCache[GetKeyName(input.KeyCode)] = false
+		PressedKeyCache[GetKeyCodeName(input.KeyCode)] = false
 	end
 end)
 
@@ -83,6 +75,12 @@ globals.Services = Services
 globals.LoadURL = LoadURL
 globals.RandomString = function() return sub(gsub(Services.HttpService:GenerateGUID(false), "-", ""), 1, random(25, 30)) end
 globals.IsKeyDown = function() return PressedKeyCache end
+globals.GetKeyCodeName = GetKeyCodeName
+globals.GetStringFromKeyCode = function(input)
+	return globals.filter(Enum.KeyCode:GetEnumItems(), function(_, v)
+		return Services.UserInputService:GetStringForKeyCode(v) == input and v
+	end)[1]
+end
 globals.filter = function(tbl, func)
     local new = {}
     for i, v in next, tbl do
