@@ -157,6 +157,15 @@ globals.GetHumanoid = function(character)
 	character = character or globals.GetCharacter()
 	return character and character:FindFirstChildOfClass("Humanoid")
 end
+globals.ReplaceHumanoid = function()
+	local humanoid = globals.GetHumanoid()
+	if humanoid then
+		local new = humanoid:Clone()
+		new.Parent = humanoid.Parent
+		new.Name = humanoid.Name
+		humanoid:Destroy()
+	end
+end
 globals.GetBackpack = function(player)
 	player = player or LocalPlayer
 	return player and player:FindFirstChildOfClass("Backpack")
