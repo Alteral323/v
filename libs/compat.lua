@@ -37,13 +37,13 @@ local globals = {
     tfind = tfind, gsub = string.gsub, sub = string.sub, random = math.random, find = string.find, lower = string.lower, gmatch = string.gmatch, match = string.match,
     insert = table.insert, remove = table.remove, cwrap = coroutine.wrap, split = string.split, format = string.format, upper = string.upper,
     clamp = math.clamp, round = math.round, heartbeat = Services.RunService.Heartbeat, renderstepped = Services.RunService.RenderStepped,
-    LocalPlayer = Services.Players.LocalPlayer
+    LocalPlayer = Services.Players.LocalPlayer, concat = table.concat, sort = table.sort, pack = table.pack, unpack = table.unpack,
+    instnew = Instance.new, cfnew = CFrame.new, v3new = Vector3.new
 }
 setfenv(1, setmetatable(globals, {__index = getfenv(1)}))
 
 local ConnectionsCache = {}
 local LoadURL = function(url) return loadstring(game:HttpGet(url))() end
-local creatingInstance = Instance.new
 local firetouched = {}
 local networkownertick = tick()
 local PressedKeyCache = {}
@@ -143,7 +143,7 @@ globals.cons.wipe = function()
 	end
 end
 globals.NewInstance = function(class, properties)
-    local new = creatingInstance(class)
+    local new = instnew(class)
     for property, value in next, properties do
         new[property] = value
     end
