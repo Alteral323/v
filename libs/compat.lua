@@ -36,7 +36,8 @@ local globals = {
     game = game, workspace = workspace, wait = task.wait, spawn = task.spawn,
     tfind = tfind, gsub = string.gsub, sub = string.sub, random = math.random, find = string.find, lower = string.lower, gmatch = string.gmatch, match = string.match,
     insert = table.insert, remove = table.remove, cwrap = coroutine.wrap, split = string.split, format = string.format, upper = string.upper,
-    clamp = math.clamp, round = math.round, heartbeat = Services.RunService.Heartbeat, renderstepped = Services.RunService.RenderStepped
+    clamp = math.clamp, round = math.round, heartbeat = Services.RunService.Heartbeat, renderstepped = Services.RunService.RenderStepped,
+    LocalPlayer = Services.Players.LocalPlayer
 }
 setfenv(1, setmetatable(globals, {__index = getfenv(1)}))
 
@@ -150,6 +151,26 @@ globals.NewInstance = function(class, properties)
 end
 globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
 globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
+globals.GetCharacter = function(player)
+	player = player or LocalPlayer
+	return player and player.Character
+end
+globals.GetHumanoid = function(character)
+	character = character or globals.GetCharacter()
+	return character and character:FindFirstChildOfClass("Humanoid")
+end
+globals.GetBackpack = function(player)
+	player = player or LocalPlayer
+	return player and player:FindFirstChildOfClass("Backpack")
+end
+globals.GetRoot = function(character)
+	character = character or globals.GetCharacter()
+	return character and (character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("Torso") or character:FindFirstChild("UpperTorso") or character:FindFirstChild("LowerTorso"))
+end
+globals.GetMagnitude = function(player)
+	local root, root2 = globals.GetRoot(), globals.GetRoot(globals.GetCharacter(player))
+	return player and (root and root2 and (root2.Position - root.Position).magnitude) or math.huge
+end
 globals.sethiddenproperty = sethiddenproperty or set_hidden_property or set_hidden_prop
 globals.gethiddenproperty = gethiddenproperty or get_hidden_property or get_hidden_prop
 globals.setsimulationradius = setsimulationradius or set_simulation_radius
