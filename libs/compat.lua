@@ -46,6 +46,8 @@ local ConnectionsCache = {}
 local LoadURL = function(url) return loadstring(game:HttpGet(url))() end
 local firetouched = {}
 local networkownertick = tick()
+local Maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
+local Signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
 local PressedKeyCache = {}
 local GetKeyCodeName = function(input) return split(tostring(input), ".")[3] end
 Services.UserInputService.InputBegan:Connect(function(input, processed)
@@ -147,8 +149,7 @@ globals.NewInstance = function(class, properties)
     end
     return new
 end
-globals.Maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
-globals.Signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
+globals.Maid, globals.Signal = Maid, Signal
 globals.GetCharacter = function(player)
 	player = player or LocalPlayer
 	return player and player.Character
@@ -341,16 +342,17 @@ globals.ImportESP = function()
     ESP.Color = ESP.Presets.Green
     return ESP
 end
-globals.OnLocalPlayerDeath = globals.Signal.new()
 do
+	local OnLocalPlayerDeath = Signal.new()
 	LocalPlayer.CharacterAdded:Connect(function()
-		repeat wait(1) until globals.GetHumanoid() ~= nil
-		globals.GetHumanoid().Died:Connect(function() globals.OnLocalPlayerDeath:Fire() end)
+		repeat wait(0.01) until globals.GetHumanoid() ~= nil
+		globals.GetHumanoid().Died:Connect(function() OnLocalPlayerDeath:Fire() end)
 	end)
 	spawn(function()
-		repeat wait(1) until globals.GetHumanoid() ~= nil
-		globals.GetHumanoid().Died:Connect(function() globals.OnLocalPlayerDeath:Fire() end)
+		repeat wait(0.01) until globals.GetHumanoid() ~= nil
+		globals.GetHumanoid().Died:Connect(function() OnLocalPlayerDeath:Fire() end)
 	end)
+	globals.OnLocalPlayerDeath = OnLocalPlayerDeath
 end
 
 --[[
