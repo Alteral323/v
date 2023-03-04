@@ -148,6 +148,8 @@ globals.NewInstance = function(class, properties)
     end
     return new
 end
+globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
+globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
 globals.sethiddenproperty = sethiddenproperty or set_hidden_property or set_hidden_prop
 globals.gethiddenproperty = gethiddenproperty or get_hidden_property or get_hidden_prop
 globals.setsimulationradius = setsimulationradius or set_simulation_radius
@@ -311,8 +313,6 @@ globals.ImportESP = function()
     ESP.Color = ESP.Presets.Green
     return ESP
 end
-globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
-globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
 
 --[[
 setfenv(1, setmetatable(loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/compat.lua"))()("/"), {__index = getfenv(1)}))
