@@ -334,6 +334,17 @@ globals.ImportESP = function()
     ESP.Color = ESP.Presets.Green
     return ESP
 end
+globals.OnLocalPlayerDeath = globals.signal.new()
+do
+	LocalPlayer.CharacterAdded:Connect(function()
+		repeat wait(1) until globals.GetHumanoid() ~= nil
+		globals.GetHumanoid().Died:Connect(function() globals.OnLocalPlayerDeath:Fire() end)
+	end)
+	spawn(function()
+		repeat wait(1) until globals.GetHumanoid() ~= nil
+		globals.GetHumanoid().Died:Connect(function() globals.OnLocalPlayerDeath:Fire() end)
+	end)
+end
 
 --[[
 setfenv(1, setmetatable(loadstring(game:HttpGet("https://raw.githubusercontent.com/Alteral323/v/main/libs/compat.lua"))()("/"), {__index = getfenv(1)}))
