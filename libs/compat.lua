@@ -149,8 +149,8 @@ globals.NewInstance = function(class, properties)
     end
     return new
 end
-globals.maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
-globals.signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
+globals.Maid = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/maid.lua")
+globals.Signal = LoadURL("https://raw.githubusercontent.com/Alteral323/v/main/libs/signal.lua")
 globals.GetCharacter = function(player)
 	player = player or LocalPlayer
 	return player and player.Character
@@ -334,7 +334,7 @@ globals.ImportESP = function()
     ESP.Color = ESP.Presets.Green
     return ESP
 end
-globals.OnLocalPlayerDeath = globals.signal.new()
+globals.OnLocalPlayerDeath = globals.Signal.new()
 do
 	LocalPlayer.CharacterAdded:Connect(function()
 		repeat wait(1) until globals.GetHumanoid() ~= nil
