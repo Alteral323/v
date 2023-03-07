@@ -255,13 +255,13 @@ LocalPlayer.CharacterAdded:Connect(function(character)
     end
 end)
 
-local Special = workspace.Game.Settings.Update:GetAttribute("UpdateLogVersion")
+local update = workspace.Game.Settings.Update:GetAttribute("UpdateLogVersion")
 ESP:AddObjectListener(workspace, {
     Type = "Model",
     Recursive = true,
     PrimaryPart = "HumanoidRootPart",
-    CustomName = (Special == "VAL23" and "Envelope") or "Ticket",
-    Color = (Special == "VAL23" and ESP.Presets.Pink) or ESP.Presets.Orange,
+    CustomName = (update == "VAL23" and "Envelope") or "Ticket",
+    Color = (update == "VAL23" and ESP.Presets.Pink) or ESP.Presets.Orange,
     Validator = function(obj)
         return obj.Parent == workspace.Game.Effects.Tickets
     end,
