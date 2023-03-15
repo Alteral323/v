@@ -17,8 +17,6 @@ for name, remote in next, remotes do
     end
 end
 
-local Disconnect = function(c) pcall(function() c:Disconnect() end) end
-
 local GetMagnitude = function(object)
     object = (object:IsA("Model") and object:GetModelCFrame()) or object
     local success, result = pcall(function() return (LocalPlayer.Character:GetModelCFrame().Position - object.Position).Magnitude end)
