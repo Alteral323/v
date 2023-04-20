@@ -83,7 +83,7 @@ local ClosetEnemy = function()
     local magnitudes = map(alive, function(_, v) return {v, (GetRoot(v).CFrame.p - GetRoot().CFrame.p).Magnitude} end)
     local valid = filter(magnitudes, function(_, v) return v[2] <= KillAuraRange.Value end)
     sort(valid, function(a, b) return a[2] < b[2] end)
-    return (#available == 0 and nil) or valid[1][1]
+    return #valid ~= 0 and valid[1][1]
 end
 
 KillAura = Combat.CreateOptionsButton({
