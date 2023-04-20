@@ -43,8 +43,7 @@ NewESP.CreateToggle({
     Name = "Boxes",
     Function = function(callback)
         ESP.Boxes = callback
-    end,
-    Default = true
+    end
 })
 NewESP.CreateToggle({
     Name = "Nametags",
@@ -61,39 +60,52 @@ NewESP.CreateToggle({
 })
 
 local Knife = ReplicatedStorage.Framework.Remotes.KnifeHitbox
+local sort = table.sort
+
+local filter = function(tbl, func)
+    local new = {}
+    for i, v in next, tbl do if func(i, v) then new[#new + 1] = v end end
+    return new
+end
+
+local map = function(tbl, func)
+    local new = {}
+    for i, v in next, tbl do
+        local k, x = func(i, v)
+        new[x or #new + 1] = k
+    end
+    return new
+end
 
 local GetRoot = function(char)
     char = char or LocalPlayer.Character
     return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
 end
 
-local isNear = function(entity, distance)
-    if entity:FindFirstChild("HumanoidRootPart") and GetRoot() then
-        return (GetRoot().Position - entity.HumanoidRootPart.Position).Magnitude <= (distance or 30)
-    end
-    return false
-end
-
 local KnifeAura = {Enabled = false}
-local KARange = {Value = 100}
+local KillAuraRange = {Value = 100}
+local MonsterInRange = function()
+    local alive = filter(workspace.Ignore.Zombies:GetChildren(), function(_, v) return v:FindFirstChildWhichIsA("Humanoid") and v:FindFirstChildWhichIsA("Humanoid").Health > 0 and GetRoot(v) end)
+    local magnitudes = map(alive, function(_, v) return {v, (GetRoot(v).CFrame.p - GetRoot().CFrame.p).Magnitude} end)
+    local valid = filter(magnitudes, function(_, v) return v[2] <= KillAuraRange.Value end)
+    sort(valid, function(a, b) return a[2] < b[2] end)
+    return #valid ~= 0 and valid[1][1]
+end
 KnifeAura = Combat.CreateOptionsButton({
     Name = "KnifeAura",
     Function = function(callback)
         if callback then
             spawn(function()
                 repeat wait(0.1)
-                    for _, v in next, workspace.Ignore.Zombies:GetChildren() do
-                        if v:FindFirstChildOfClass("Humanoid") and v:FindFirstChild("HumanoidRootPart") and isNear(v, KARange.Value) then
-                            Knife:FireServer(v:FindFirstChildOfClass("Humanoid"))
-                        end
-                    end
+                    local target = MonsterInRange()
+                    if target then Knife:FireServer(target:FindFirstChildWhichIsA("Humanoid")) end
                 until not KnifeAura.Enabled
             end)
         end
     end,
     HoverText = "Stabs monsters close enough"
 })
-KARange = KnifeAura.CreateSlider({
+KillAuraRange = KnifeAura.CreateSlider({
     Name = "Range",
     Min = 80,
     Max = 200,
@@ -102,18 +114,18 @@ KARange = KnifeAura.CreateSlider({
 })
 
 local AutoCollect = {Enabled = false}
-local LAutoCollect
+local MAutoCollect = maid.new()
 AutoCollect = World.CreateOptionsButton({
     Name = "AutoCollect",
     Function = function(callback)
         if callback then
-            LAutoCollect = workspace.Ignore._Powerups.ChildAdded:Connect(function(powerup)
+            MAutoCollect:GiveTask(workspace.Ignore._Powerups.ChildAdded:Connect(function(powerup)
                 if GetRoot() then
                     firetouchinterest(GetRoot(), powerup, 0)
                 end
-            end)
+            end))
         else
-            LAutoCollect:Disconnect()
+            MAutoCollect:DoCleaning()
         end
     end,
     HoverText = "Auto collects powerups"
