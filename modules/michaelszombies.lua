@@ -60,6 +60,8 @@ NewESP.CreateToggle({
     end
 })
 
+local Knife = ReplicatedStorage.Framework.Remotes.KnifeHitbox
+
 local GetRoot = function(char)
     char = char or LocalPlayer.Character
     return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
@@ -80,9 +82,9 @@ KnifeAura = Combat.CreateOptionsButton({
         if callback then
             spawn(function()
                 repeat wait(0.1)
-                    for _, v in pairs(workspace.Ignore.Zombies:GetChildren()) do
-                        if v and v:FindFirstChildOfClass("Humanoid") and v:FindFirstChild("HumanoidRootPart") and isNear(v, KARange.Value) then
-                            ReplicatedStorage.Framework.Remotes.KnifeHitbox:FireServer(v:FindFirstChildOfClass("Humanoid"))
+                    for _, v in next, workspace.Ignore.Zombies:GetChildren() do
+                        if v:FindFirstChildOfClass("Humanoid") and v:FindFirstChild("HumanoidRootPart") and isNear(v, KARange.Value) then
+                            Knife:FireServer(v:FindFirstChildOfClass("Humanoid"))
                         end
                     end
                 until not KnifeAura.Enabled
@@ -100,18 +102,18 @@ KARange = KnifeAura.CreateSlider({
 })
 
 local AutoCollect = {Enabled = false}
-local collect
+local LAutoCollect
 AutoCollect = World.CreateOptionsButton({
     Name = "AutoCollect",
     Function = function(callback)
         if callback then
-            collect = workspace.Ignore._Powerups.ChildAdded:Connect(function(obj)
+            LAutoCollect = workspace.Ignore._Powerups.ChildAdded:Connect(function(powerup)
                 if GetRoot() then
-                    firetouchinterest(GetRoot(), obj, 0)
+                    firetouchinterest(GetRoot(), powerup, 0)
                 end
             end)
         else
-            collect:Disconnect()
+            LAutoCollect:Disconnect()
         end
     end,
     HoverText = "Auto collects powerups"
