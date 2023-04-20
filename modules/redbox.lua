@@ -33,7 +33,6 @@ NewESP.CreateToggle({
     Function = function(callback)
         ESP.Boxes = callback
     end,
-    Default = true
 })
 NewESP.CreateToggle({
     Name = "Nametags",
@@ -60,6 +59,7 @@ local AddTool = ReplicatedStorage.AddTool
 local Loadout = ReplicatedStorage.Assets.Loadout
 local HitMelee = ReplicatedStorage.Assets.Remotes.hitMelee
 local InvisStorage = {}
+local sort = table.sort
 
 local CreateWarning = function(title, text, del)
     local suc, res = pcall(function()
@@ -76,18 +76,13 @@ local GetRoot = function(char)
 end
 
 local Tools = {Enabled = false}
+local Weapons = {Loadout.Melee.Halberd, Loadout.Secondary:FindFirstChild("Beretta M9"), Loadout.Primary["Pump Shotgun"], Loadout.Primary["M4A1"], Loadout.Misc:FindFirstChild("Frag Grenade"), Loadout.Misc:FindFirstChild("Incendiary Grenade"), Loadout.Misc:FindFirstChild("Cuffs")}
 Tools = Combat.CreateOptionsButton({
     Name = "Tools",
     Function = function(callback)
         if callback then
             Tools.ToggleButton(false)
-            AddTool:FireServer(LocalPlayer.Character, Loadout.Melee.Halberd)
-            AddTool:FireServer(LocalPlayer.Character, Loadout.Secondary:FindFirstChild("Beretta M9"))
-            AddTool:FireServer(LocalPlayer.Character, Loadout.Primary["Pump Shotgun"])
-            AddTool:FireServer(LocalPlayer.Character, Loadout.Primary["M4A1"])
-            AddTool:FireServer(LocalPlayer.Character, Loadout.Misc:FindFirstChild("Frag Grenade"))
-            AddTool:FireServer(LocalPlayer.Character, Loadout.Misc:FindFirstChild("Incendiary Grenade"))
-            AddTool:FireServer(LocalPlayer.Character, Loadout.Misc:FindFirstChild("Cuffs"))
+            for _, weapon in next, Weapons do AddTool:FireServer(LocalPlayer.Character, weapon) end
         end
     end
 })
@@ -136,11 +131,7 @@ local Invisibility = World.CreateOptionsButton({
                 Weld:Destroy()
                 InvisStorage.Seat = nil
                 InvisStorage.Weld = nil
-                for i, v in next, InvisStorage do
-                    if type(v) == "number" then
-                        i.Transparency = v
-                    end
-                end
+                for i, v in next, InvisStorage do if type(v) == "number" then i.Transparency = v end end
             end
         end
     end
@@ -275,24 +266,44 @@ JumpVal = JumpPower.CreateSlider({
 })
 
 local equipMelee = function()
-    if LocalPlayer and LocalPlayer:FindFirstChildWhichIsA("Backpack") and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid") then
-        local Backpack = LocalPlayer:FindFirstChildWhichIsA("Backpack")
-        local Humanoid = LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
-        for _, v in pairs(LocalPlayer.Character:GetDescendants()) do
-            if v.Name == "toolSettings" and v:IsA("ModuleScript") and require(v).toolType == "melee" then
-                return {v.Parent}
+    local backpack = LocalPlayer:FindFirstChildWhichIsA("Backpack")
+    local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid")
+    if LocalPlayer.Character and backpack and humanoid then
+        for _, v in next, LocalPlayer.Character:GetDescendants() do
+            if v:IsA("ModuleScript") and v.Name == "toolSettings" and require(v).toolType == "melee" then
+                return v.Parent, ""
             end
         end
-        Humanoid:UnequipTools()
-        for _, v in pairs(Backpack:GetDescendants()) do
-            if v.Name == "toolSettings" and v:IsA("ModuleScript") and require(v).toolType == "melee" then
+        humanoid:UnequipTools()
+        for _, v in next, backpack:GetDescendants() do
+            if v:IsA("ModuleScript") and v.Name == "toolSettings" and require(v).toolType == "melee" then
                 local melee = v.Parent
-                Humanoid:EquipTool(melee)
-                return {melee, "equipping"}
+                humanoid:EquipTool(melee)
+                return melee, "equipping"
             end
         end
     end
-    return {false}
+    return false, ""
+end
+
+local filter = function(tbl, func)
+    local new = {}
+    for i, v in next, tbl do if func(i, v) then new[#new + 1] = v end end
+    return new
+end
+
+local map = function(tbl, func)
+    local new = {}
+    for i, v in next, tbl do
+        local k, x = func(i, v)
+        new[x or #new + 1] = k
+    end
+    return new
+end
+
+local GetRoot = function(char)
+    char = char or LocalPlayer.Character
+    return char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
 end
 
 local WorldToScreen = function(Object)
@@ -307,10 +318,10 @@ end
 local GetClosestPlayerFromCursor = function()
     local found = nil
     local ClosestDistance = math.huge
-    for _, v in pairs(Players:GetPlayers()) do
-        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChildOfClass("Humanoid") then
+    for _, v in next, Players:GetPlayers() do
+        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChildWhichIsA("Humanoid") then
             for _, x in pairs(v.Character:GetChildren()) do
-                if string.find(x.Name, "Torso") then
+                if x.Name:find("Torso") then
                     local Distance = (WorldToScreen(x) - MousePositionToVector2()).Magnitude
                     if Distance < ClosestDistance then
                         ClosestDistance = Distance
@@ -323,6 +334,20 @@ local GetClosestPlayerFromCursor = function()
     return found
 end
 
+local ClosetEnemy = function()
+    local available = filter(Players:GetPlayers(), function(_, v) return v ~= LocalPlayer and v.Character and GetRoot(v.Character) end)
+    local alive = filter(available, function(_, v) return v.Character:FindFirstChildWhichIsA("Humanoid") and v.Character:FindFirstChildWhichIsA("Humanoid").Health > 0 end)
+    local magnitudes = map(alive, function(_, v) return {v, (GetRoot(v.Character).CFrame.p - GetRoot().CFrame.p).Magnitude} end)
+    sort(magnitudes, function(a, b) return a[2] < b[2] end)
+    return (#available == 0 and nil) or magnitudes[1][1]
+end
+
+local GetEntitiesFromMethod = function(method)
+    if method == "Nearest" then return {ClosetEnemy()} end
+    if method == "Cursor" then return {GetClosestPlayerFromCursor()} end
+    return filter(Players:GetPlayers(), function(_, v) return v ~= LocalPlayer end)
+end
+
 local KillMethod = {Value = "All"}
 local EntityKill = {Enabled = false}
 EntityKill = Blatant.CreateOptionsButton({
@@ -330,84 +355,17 @@ EntityKill = Blatant.CreateOptionsButton({
     Function = function(callback)
         if callback then
             EntityKill.ToggleButton(false)
-            local melee = equipMelee()
-            if melee[1] then
-                if melee[2] == "equipping" then
-                    wait(require(melee[1].toolSettings).equipTime + 0.01)
-                end
-                if KillMethod.Value == "All" then
-                    for _, v in pairs(Players:GetPlayers()) do
-                        if v ~= LocalPlayer and v.Character then
-                            local Humanoid = v.Character:FindFirstChildWhichIsA("Humanoid")
-                            local Head = v.Character:FindFirstChild("Head")
-                            if Humanoid and Humanoid.Health > 0 and Head then
-                                local args = {
-                                    [1] = Head,
-                                    [2] = Vector3.new(182.07310485839844, 5.787327289581299, -430.5772705078125),
-                                    [3] = Vector3.new(-0.783150851726532, 0.18024331331253052, -0.5951363444328308),
-                                    [4] = Enum.Material.Plastic,
-                                    [5] = CFrame.new(Vector3.new(-0.159149169921875, -0.2970867156982422, 1.0000152587890625), Vector3.new(0.00001424551010131836, 7.227063179016113e-07, 1.0000001192092896)),
-                                    [6] = melee[1]
-                                }
-                                for _ = 1, 4 do
-                                    HitMelee:FireServer(unpack(args))
-                                end
-                            end
-                        end
-                    end
-                end
-                if KillMethod.Value == "Nearest" then
-                    if LocalPlayer and LocalPlayer.Character and GetRoot() then
-                        local Root = GetRoot()
-                        local lowest = math.huge
-                        local target = nil
-                        for _, v in pairs(Players:GetPlayers()) do
-                            if v ~= LocalPlayer and v.Character then
-                                local distance = v:DistanceFromCharacter(Root.Position)
-                                if distance < lowest then
-                                    lowest = distance
-                                    target = v
-                                end
-                            end
-                        end
-                        if target ~= nil and target.Character then
-                            local Humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
-                            local Head = target.Character:FindFirstChild("Head")
-                            if Humanoid and Humanoid.Health > 0 and Head then
-                                local args = {
-                                    [1] = Head,
-                                    [2] = Vector3.new(182.07310485839844, 5.787327289581299, -430.5772705078125),
-                                    [3] = Vector3.new(-0.783150851726532, 0.18024331331253052, -0.5951363444328308),
-                                    [4] = Enum.Material.Plastic,
-                                    [5] = CFrame.new(Vector3.new(-0.159149169921875, -0.2970867156982422, 1.0000152587890625), Vector3.new(0.00001424551010131836, 7.227063179016113e-07, 1.0000001192092896)),
-                                    [6] = melee[1]
-                                }
-                                for _ = 1, 4 do
-                                    HitMelee:FireServer(unpack(args))
-                                end
-                            end
-                        end
-                    end
-                end
-                if KillMethod.Value == "Cursor" then
-                    if LocalPlayer and LocalPlayer.Character then
-                        local target = GetClosestPlayerFromCursor()
-                        if target ~= nil and target.Character then
-                            local Humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
-                            local Head = target.Character:FindFirstChild("Head")
-                            if Humanoid and Humanoid.Health > 0 and Head then
-                                local args = {
-                                    [1] = Head,
-                                    [2] = Vector3.new(182.07310485839844, 5.787327289581299, -430.5772705078125),
-                                    [3] = Vector3.new(-0.783150851726532, 0.18024331331253052, -0.5951363444328308),
-                                    [4] = Enum.Material.Plastic,
-                                    [5] = CFrame.new(Vector3.new(-0.159149169921875, -0.2970867156982422, 1.0000152587890625), Vector3.new(0.00001424551010131836, 7.227063179016113e-07, 1.0000001192092896)),
-                                    [6] = melee[1]
-                                }
-                                for _ = 1, 4 do
-                                    HitMelee:FireServer(unpack(args))
-                                end
-                            end
+            local melee, status = equipMelee()
+            if melee then
+                if status == "equipping" then wait(require(melee.toolSettings).equipTime + 0.01) end
+                for _, target in next, GetEntitiesFromMethod(KillMethod.Value) do
+                    if target.Character then
+                        local humanoid = target.Character:FindFirstChildWhichIsA("Humanoid")
+                        local head = target.Character:FindFirstChild("Head")
+                        if humanoid and humanoid.Health > 0 and head then
+                            local v3 = Vector3.new(0, 0, 0)
+                            local cf = CFrame.new(v3, v3, v3)
+                            for _ = 1, 4 do HitMelee:FireServer(head, v3, v3, Enum.Material.Plastic, cf, melee) end
                         end
                     end
                 end
